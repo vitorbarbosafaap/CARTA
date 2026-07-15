@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Cartas de Recusa · Pitzi Regulação</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --pitzi-ink:#0a1128;
+    --pitzi-accent:#00b28f;
+    --pitzi-accent-dark:#008a6e;
+    --pitzi-warn:#c2410c;
+    --pitzi-muted:#64748b;
+    --pitzi-bg:#f8fafc;
+    --pitzi-card:#ffffff;
+    --pitzi-border:#e2e8f0;
+  }
+  html,body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--pitzi-bg);color:var(--pitzi-ink);}
+  .doc-preview{font-family:'Times New Roman',Georgia,serif;font-size:12pt;line-height:1.5;color:#111;}
+  .doc-preview p{margin:0 0 10pt 0;}
+  .doc-preview strong{font-weight:700;}
+  .doc-preview .doc-title{font-weight:700;font-size:13pt;margin-bottom:14pt;}
+  .doc-preview .doc-header{margin-bottom:14pt;}
+  .doc-preview .doc-clause{margin-bottom:10pt;text-align:justify;}
+  .field-label{font-size:12px;font-weight:600;color:#334155;letter-spacing:0.02em;text-transform:uppercase;}
+  .input-base{width:100%;border:1px solid var(--pitzi-border);border-radius:6px;padding:8px 10px;font-size:14px;background:#fff;transition:border .15s,box-shadow .15s;}
+  .input-base:focus{outline:none;border-color:var(--pitzi-accent);box-shadow:0 0 0 3px rgba(0,178,143,.15);}
+  .card{background:var(--pitzi-card);border:1px solid var(--pitzi-border);border-radius:10px;}
+  .section-title{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--pitzi-accent-dark);}
+  .checkbox-row{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--pitzi-border);border-radius:8px;background:#fff;cursor:pointer;transition:border-color .15s,background .15s;}
+  .checkbox-row:hover{border-color:var(--pitzi-accent);background:#f0fdfa;}
+  .checkbox-row input[type=checkbox]{margin-top:3px;accent-color:var(--pitzi-accent);width:16px;height:16px;flex-shrink:0;}
+  .checkbox-row.active{border-color:var(--pitzi-accent);background:#ecfdf5;}
+  .badge{display:inline-block;padding:2px 8px;font-size:10px;font-weight:600;border-radius:4px;letter-spacing:0.03em;}
+  .badge-fiscal{background:#dbeafe;color:#1e40af;}
+  .badge-evento{background:#fef3c7;color:#92400e;}
+  .badge-comportamento{background:#fce7f3;color:#9d174d;}
+  .badge-indenitario{background:#fee2e2;color:#991b1b;}
+  .badge-interesse{background:#e0e7ff;color:#3730a3;}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;}
+  .btn-primary{background:var(--pitzi-accent);color:#fff;border:1px solid var(--pitzi-accent-dark);}
+  .btn-primary:hover{background:var(--pitzi-accent-dark);}
+  .btn-secondary{background:#fff;color:var(--pitzi-ink);border:1px solid var(--pitzi-border);}
+  .btn-secondary:hover{border-color:var(--pitzi-accent);color:var(--pitzi-accent-dark);}
+  .tab-btn{padding:8px 14px;font-size:13px;font-weight:600;border-bottom:2px solid transparent;color:var(--pitzi-muted);cursor:pointer;}
+  .tab-btn.active{color:var(--pitzi-accent-dark);border-color:var(--pitzi-accent);}
+  .helper-text{font-size:12px;color:var(--pitzi-muted);margin-top:4px;}
+  details summary{cursor:pointer;list-style:none;}
+  details summary::-webkit-details-marker{display:none;}
+  .divider-h{border-top:1px solid var(--pitzi-border);margin:16px 0;}
+  @media print{.no-print{display:none !important;}}
+</style>
+</head>
+<body class="min-h-screen">
+
+<header class="border-b border-slate-200 bg-white">
+  <div class="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between">
+    <div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-md bg-[var(--pitzi-ink)] flex items-center justify-center text-white font-bold text-sm">P</div>
+        <div>
+          <div class="text-base font-bold tracking-tight">Gerador de Cartas de Recusa</div>
+          <div class="text-xs text-slate-500">Pitzi · Departamento de Regulação · Lei nº 15.040/2024</div>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="loadExample()" class="btn btn-secondary text-xs">Carregar exemplo</button>
+      <button onclick="resetForm()" class="btn btn-secondary text-xs">Limpar</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-[1400px] mx-auto px-6 py-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+  <!-- COLUNA 1: FORMULÁRIO -->
+  <section class="space-y-4">
+
+    <!-- 1. Identificação do sinistro -->
+    <div class="card p-5">
+      <div class="section-title mb-3">1 · Identificação do sinistro</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="field-label">Número do Sinistro</label>
+          <input type="text" id="sinistro" class="input-base mt-1" placeholder="Ex.: 589299" oninput="render()">
+        </div>
+        <div>
+          <label class="field-label">Número do Bilhete</label>
+          <input type="text" id="bilhete" class="input-base mt-1" placeholder="Ex.: 4803277" oninput="render()">
+        </div>
+        <div>
+          <label class="field-label">Data da carta</label>
+          <input type="date" id="dataCarta" class="input-base mt-1" oninput="render()">
+        </div>
+        <div>
+          <label class="field-label">Cidade de emissão</label>
+          <input type="text" id="cidade" class="input-base mt-1" value="São Paulo" oninput="render()">
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Titular -->
+    <div class="card p-5">
+      <div class="section-title mb-3">2 · Dados do titular</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2">
+          <label class="field-label">Nome completo</label>
+          <input type="text" id="nome" class="input-base mt-1" placeholder="Ex.: DALILA ARAUJO PESSOA" oninput="render()">
+        </div>
+        <div>
+          <label class="field-label">CPF</label>
+          <input type="text" id="cpf" class="input-base mt-1" placeholder="000.000.000-00" oninput="render()">
+        </div>
+        <div>
+          <label class="field-label">Tratamento</label>
+          <select id="tratamento" class="input-base mt-1" onchange="render()">
+            <option value="Sr.">Sr.</option>
+            <option value="Sra." selected>Sra.</option>
+          </select>
+        </div>
+        <div class="col-span-2">
+          <label class="field-label">Endereço completo (rua, nº, bairro, cidade/UF, CEP)</label>
+          <input type="text" id="endereco" class="input-base mt-1" placeholder="Ex.: Rua Conde de Bonfim, nº 557, Tijuca, Rio de Janeiro/RJ, CEP 20520-052" oninput="render()">
+          <div class="helper-text">Usado apenas na Notificação de Resolução do Contrato.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Aparelho -->
+    <div class="card p-5">
+      <div class="section-title mb-3">3 · Aparelho segurado</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2">
+          <label class="field-label">Descrição do aparelho</label>
+          <input type="text" id="aparelho" class="input-base mt-1" placeholder="Ex.: Samsung Galaxy A16 4G 4/128" oninput="render()">
+          <div class="helper-text">Marca, modelo, memória, cor — como consta no bilhete.</div>
+        </div>
+        <div class="col-span-2">
+          <label class="field-label">IMEI</label>
+          <input type="text" id="imei" class="input-base mt-1" placeholder="Ex.: 350792524225875" oninput="render()">
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Seguradora -->
+    <div class="card p-5">
+      <div class="section-title mb-3">4 · Seguradora parceira</div>
+      <label class="field-label">Selecione</label>
+      <select id="seguradora" class="input-base mt-1" onchange="render()">
+        <option value="kakau">KAKAU Seguradora S.A.</option>
+        <option value="gazin">GAZIN SEGUROS S.A.</option>
+        <option value="generali">Generali Brasil Seguros S.A.</option>
+        <option value="mapfre">Mapfre Seguros Gerais S.A.</option>
+      </select>
+      <div class="helper-text mt-2" id="seguradora-info"></div>
+    </div>
+
+    <!-- 5. Hipóteses de recusa -->
+    <div class="card p-5">
+      <div class="section-title mb-2">5 · Fundamentos da recusa</div>
+      <p class="text-xs text-slate-500 mb-3">Selecione todas as hipóteses aplicáveis. A carta é montada automaticamente com numeração (a), (b), (c)... e a base legal correspondente.</p>
+
+      <div class="space-y-2" id="hipoteses-container"></div>
+
+      <details class="mt-3">
+        <summary class="text-xs font-semibold text-[var(--pitzi-accent-dark)] flex items-center gap-1">
+          <span>▸</span> Hipótese customizada (texto livre)
+        </summary>
+        <div class="mt-2">
+          <textarea id="hipoteseCustom" rows="3" class="input-base" placeholder="Texto adicional que será acrescido ao final da lista de fundamentos. Ex.: divergência entre a cor declarada e a cor registrada..." oninput="render()"></textarea>
+        </div>
+      </details>
+    </div>
+
+    <!-- 6. Restituição (para a Notificação) -->
+    <div class="card p-5">
+      <div class="section-title mb-3">6 · Restituição na Notificação de Resolução</div>
+      <div class="space-y-2">
+        <label class="flex items-start gap-2 cursor-pointer">
+          <input type="radio" name="restituicao" value="sem_premio" checked onchange="render()" class="mt-1 accent-teal-600">
+          <div class="text-sm">
+            <div class="font-semibold">Sem prêmio a restituir</div>
+            <div class="text-xs text-slate-500">Vigência em período final — sem período de risco não decorrido. Franquia estornada integralmente se paga.</div>
+          </div>
+        </label>
+        <label class="flex items-start gap-2 cursor-pointer">
+          <input type="radio" name="restituicao" value="proporcional" onchange="render()" class="mt-1 accent-teal-600">
+          <div class="text-sm">
+            <div class="font-semibold">Restituição proporcional do prêmio</div>
+            <div class="text-xs text-slate-500">Há período de risco não decorrido. Devolução proporcional + franquia integral.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- COLUNA 2: PREVIEW -->
+  <section class="space-y-4 lg:sticky lg:top-6 lg:self-start">
+
+    <div class="card overflow-hidden">
+      <div class="border-b border-slate-200 px-5 pt-3 flex items-center justify-between">
+        <div class="flex gap-1">
+          <button class="tab-btn active" data-tab="carta" onclick="switchTab('carta')">Carta de Resposta</button>
+          <button class="tab-btn" data-tab="notif" onclick="switchTab('notif')">Notificação de Resolução</button>
+        </div>
+        <div class="flex gap-2 pb-2">
+          <button onclick="copyDoc()" class="btn btn-secondary text-xs">Copiar</button>
+          <button onclick="downloadDoc()" class="btn btn-primary text-xs">Baixar .doc</button>
+        </div>
+      </div>
+      <div class="p-6 max-h-[80vh] overflow-y-auto bg-white">
+        <div id="preview-carta" class="doc-preview"></div>
+        <div id="preview-notif" class="doc-preview" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Painel de fluxo Jira -->
+    <div class="card p-5 bg-slate-50">
+      <div class="section-title mb-2">Fluxo de aprovação</div>
+      <ol class="text-sm space-y-2 text-slate-700">
+        <li><span class="font-semibold text-[var(--pitzi-accent-dark)]">1.</span> Preencher formulário → baixar .doc</li>
+        <li><span class="font-semibold text-[var(--pitzi-accent-dark)]">2.</span> Anexar ao card Jira <span class="font-mono text-xs bg-white px-1.5 py-0.5 rounded border">KAN-XX</span> (subtarefa por sinistro)</li>
+        <li><span class="font-semibold text-[var(--pitzi-accent-dark)]">3.</span> Transição para <span class="font-mono text-xs bg-white px-1.5 py-0.5 rounded border">Aguardando aprovação Vitor</span></li>
+        <li><span class="font-semibold text-[var(--pitzi-accent-dark)]">4.</span> Após aprovação → envio ao titular pelos canais oficiais</li>
+        <li><span class="font-semibold text-[var(--pitzi-accent-dark)]">5.</span> Registrar comprovante de envio e transitar para <span class="font-mono text-xs bg-white px-1.5 py-0.5 rounded border">Concluído</span></li>
+      </ol>
+    </div>
+
+  </section>
+</main>
+
+<footer class="text-center text-xs text-slate-400 py-6">
+  Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda. · CNPJ 13.403.189/0001-05 · Departamento de Regulação
+</footer>
+
+<script>
+// ==================== DADOS BASE ====================
+const SEGURADORAS = {
+  kakau:    { nome: 'KAKAU Seguradora S.A.',              cnpj: '43.409.064/0001-53', susep: '15414.609920/2022-17' },
+  gazin:    { nome: 'GAZIN SEGUROS S.A.',                 cnpj: '28.414.401/0001-07', susep: '15414.612190/2020-70' },
+  generali: { nome: 'Generali Brasil Seguros S/A',        cnpj: '33.072.307/0001-57', susep: '15414.900378/2018-58' },
+  mapfre:   { nome: 'Mapfre Seguros Gerais S.A.',         cnpj: '61.074.175/0001-38', susep: '15414.900001/2000-00' }
+};
+
+// Hipóteses mapeadas a partir da análise das cartas existentes
+const HIPOTESES = [
+  {
+    id:'fiscal_inconsistencia', categoria:'fiscal', label:'NF com inconsistências cadastrais/operacionais',
+    texto:'o documento fiscal apresentado para comprovação da aquisição do bem contém inconsistências cadastrais e operacionais objetivas, verificadas em registros públicos, que impedem a utilização do documento como comprovação suficiente da aquisição e da pré-existência do bem protegido',
+    arts:['75','1','5']
+  },
+  {
+    id:'fiscal_nao_comprova', categoria:'fiscal', label:'NF não comprova aquisição/preexistência',
+    texto:'a documentação fiscal apresentada não comprova a efetiva aquisição e a preexistência do bem na forma declarada',
+    arts:['1','5','75']
+  },
+  {
+    id:'divergencia_especificacoes', categoria:'fiscal', label:'Divergência entre especificações técnicas e documentação',
+    texto:'divergência entre as especificações técnicas do bem segurado e as constantes da documentação apresentada e da contratação',
+    arts:['1','75']
+  },
+  {
+    id:'nf_posterior_evento', categoria:'fiscal', label:'NF emitida em data posterior ao evento',
+    texto:'nota fiscal emitida em data posterior ao evento não comprova a preexistência do bem',
+    arts:['1','5','75']
+  },
+  {
+    id:'inconsistencia_temporal', categoria:'fiscal', label:'Inconsistência temporal (registros técnicos vs. NF)',
+    texto:'inconsistência temporal entre os registros técnicos do equipamento e a documentação fiscal apresentada',
+    arts:['75']
+  },
+  {
+    id:'pagamento_especie', categoria:'fiscal', label:'Pagamento em espécie sem quitação rastreável',
+    texto:'o pagamento declarado, realizado integralmente em espécie, não veio acompanhado de comprovante de quitação rastreável, o que, somado às demais circunstâncias, inviabiliza a verificação material da operação de aquisição',
+    arts:['75']
+  },
+  {
+    id:'ausencia_quitacao', categoria:'fiscal', label:'Ausência de comprovante de quitação rastreável',
+    texto:'ausência de comprovante de quitação rastreável da operação de aquisição',
+    arts:['75']
+  },
+  {
+    id:'divergencia_pagamento', categoria:'fiscal', label:'Divergência valor/destinatário/modalidade de pagamento',
+    texto:'documentação financeira apresentada não comprova a efetiva quitação da operação descrita na nota fiscal (valor, destinatário ou modalidade divergentes)',
+    arts:['1','5','75']
+  },
+  {
+    id:'bo_narrativa', categoria:'evento', label:'BO não descreve circunstância concreta',
+    texto:'o boletim de ocorrência apresentado não descreve circunstância concreta que permita caracterizar, de forma inequívoca, a ocorrência de evento compreendido na cobertura contratada, mostrando-se a narrativa igualmente compatível com hipóteses de risco excluído, nos termos das Condições Gerais',
+    arts:['75']
+  },
+  {
+    id:'furto_simples', categoria:'evento', label:'Evento tipificado como furto simples (excluído)',
+    texto:'o registro de ocorrência tipifica o evento como furto simples (art. 155 do Código Penal), hipótese não abrangida pela cobertura contratada, nos termos das Condições Gerais',
+    arts:['75']
+  },
+  {
+    id:'imei_sem_bloqueio', categoria:'evento', label:'IMEI sem bloqueio (documentação incompleta)',
+    texto:'documentação do evento incompleta: ausência de bloqueio do IMEI junto à operadora, comprometendo a verificação do evento comunicado',
+    arts:['75']
+  },
+  {
+    id:'bo_duplicado', categoria:'evento', label:'BO duplicado (mesmo bem, vítimas diferentes)',
+    texto:'o mesmo aparelho, identificado pelo mesmo número de série, foi objeto de registro policial anterior, em nome de terceiro, e voltou a figurar como bem subtraído em novo registro policial. A coexistência de dois registros policiais distintos sobre o mesmo aparelho, atribuídos a vítimas diferentes e em curto intervalo de tempo, impede a caracterização da ocorrência de evento coberto',
+    arts:['75','76']
+  },
+  {
+    id:'desaparecimento_bem', categoria:'evento', label:'Desaparecimento do bem — resolução contratual',
+    texto:'o contrato protegia um aparelho determinado que, conforme comunicado, não está mais em posse do segurado; com o desaparecimento do bem, resolve-se o contrato',
+    arts:['6']
+  },
+  {
+    id:'falta_contato', categoria:'comportamento', label:'Reiteradas tentativas de contato infrutíferas',
+    texto:'as reiteradas tentativas de contato realizadas para a obtenção de esclarecimentos essenciais à regulação restaram infrutíferas, em prejuízo do dever de prestação de informações previsto no art. 66 da Lei nº 15.040/2024',
+    arts:['66']
+  },
+  {
+    id:'interesse_legitimo', categoria:'interesse', label:'Bem em nome de terceiro (interesse legítimo)',
+    texto:'o documento de aquisição do bem encontra-se emitido em nome de terceiro, não tendo sido demonstrado o interesse legítimo da parte reclamante sobre o aparelho',
+    arts:['1','5']
+  },
+  {
+    id:'recebimento_multiplo', categoria:'indenitario', label:'Comunicação a mais de uma seguradora',
+    texto:'os elementos apurados indicam a comunicação do bem a mais de uma seguradora, situação vedada pelo princípio indenitário, que veda o recebimento múltiplo pelo mesmo prejuízo',
+    arts:['89','90']
+  },
+  {
+    id:'principio_indenitario', categoria:'indenitario', label:'Ausência de prejuízo indenizável',
+    texto:'ausência de prejuízo indenizável, em observância ao princípio indenitário',
+    arts:['81','89','90']
+  }
+];
+
+const CATEGORIAS = {
+  fiscal:        { label:'Documentação fiscal', badge:'badge-fiscal' },
+  evento:        { label:'Caracterização do evento', badge:'badge-evento' },
+  comportamento: { label:'Dever de informação (art. 66)', badge:'badge-comportamento' },
+  interesse:     { label:'Interesse legítimo', badge:'badge-interesse' },
+  indenitario:   { label:'Princípio indenitário', badge:'badge-indenitario' }
+};
+
+// ==================== INICIALIZAÇÃO ====================
+function initHipoteses(){
+  const c = document.getElementById('hipoteses-container');
+  const ordemCat = ['fiscal','evento','comportamento','interesse','indenitario'];
+  ordemCat.forEach(cat=>{
+    const catInfo = CATEGORIAS[cat];
+    const header = document.createElement('div');
+    header.className = 'mt-3 first:mt-0 mb-1';
+    header.innerHTML = `<span class="badge ${catInfo.badge}">${catInfo.label}</span>`;
+    c.appendChild(header);
+    HIPOTESES.filter(h=>h.categoria===cat).forEach(h=>{
+      const row = document.createElement('label');
+      row.className = 'checkbox-row';
+      row.dataset.hipoteseId = h.id;
+      row.innerHTML = `
+        <input type="checkbox" data-hipotese="${h.id}" onchange="onHipoteseChange(this)">
+        <div class="flex-1">
+          <div class="text-sm font-semibold text-slate-800">${h.label}</div>
+          <div class="text-xs text-slate-500 mt-0.5">${truncate(h.texto,140)}</div>
+        </div>`;
+      c.appendChild(row);
+    });
+  });
+}
+function truncate(s,n){return s.length>n?s.slice(0,n)+'…':s;}
+function onHipoteseChange(cb){
+  cb.closest('.checkbox-row').classList.toggle('active', cb.checked);
+  render();
+}
+
+// ==================== COLETA DE DADOS ====================
+function getData(){
+  return {
+    sinistro: v('sinistro') || '________',
+    bilhete: v('bilhete') || '________',
+    dataCarta: formatDate(v('dataCarta')) || '__ de ______ de 2026',
+    cidade: v('cidade') || 'São Paulo',
+    nome: (v('nome') || 'NOME DO TITULAR').trim(),
+    cpf: v('cpf') || '___.___.___-__',
+    tratamento: v('tratamento'),
+    endereco: v('endereco') || 'Endereço completo',
+    aparelho: v('aparelho') || 'Descrição do aparelho',
+    imei: v('imei') || '___________',
+    seguradora: SEGURADORAS[v('seguradora')],
+    hipoteses: getSelectedHipoteses(),
+    hipoteseCustom: v('hipoteseCustom').trim(),
+    restituicao: document.querySelector('input[name=restituicao]:checked').value
+  };
+}
+function v(id){ const el=document.getElementById(id); return el ? el.value : ''; }
+function formatDate(iso){
+  if(!iso) return '';
+  const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const [y,m,d] = iso.split('-');
+  return `${d} de ${meses[+m-1]} de ${y}`;
+}
+function getSelectedHipoteses(){
+  return Array.from(document.querySelectorAll('input[data-hipotese]:checked')).map(cb=>{
+    return HIPOTESES.find(h=>h.id===cb.dataset.hipotese);
+  });
+}
+
+// ==================== GERAÇÃO DE ARTIGOS ====================
+function articlesFromHipoteses(hipoteses){
+  const set = new Set();
+  hipoteses.forEach(h => h.arts.forEach(a => set.add(a)));
+  set.add('75'); // sempre presente (regulação)
+  set.add('86_6'); // sempre presente (prazo)
+  return Array.from(set);
+}
+function formatArts(arts){
+  // formata como "arts. 1º, 5º, 66, 75, 76, 81, 86, § 6º, 89 e 90"
+  const has = a => arts.includes(a);
+  const parts = [];
+  const ordem = ['1','5','6','66','75','76','81','86_6','89','90'];
+  const nomes = {'1':'1º','5':'5º','6':'6º','66':'66','75':'75','76':'76','81':'81','86_6':'86, § 6º','89':'89','90':'90'};
+  ordem.forEach(k=>{ if(has(k)) parts.push(nomes[k]); });
+  if(parts.length===1) return `art. ${parts[0]}`;
+  const last = parts.pop();
+  return `arts. ${parts.join(', ')} e ${last}`;
+}
+
+// ==================== RENDER: CARTA ====================
+function renderCarta(){
+  const d = getData();
+  const pronome = d.tratamento === 'Sr.' ? 'Prezado' : 'Prezada';
+  const sujTitular = d.tratamento === 'Sr.' ? 'Ao Sr.' : 'À Sra.';
+  const arts = articlesFromHipoteses(d.hipoteses);
+  const artsStr = formatArts(arts);
+
+  let listaFundamentos = '';
+  if(d.hipoteses.length > 0 || d.hipoteseCustom){
+    const letras = ['a','b','c','d','e','f','g','h','i','j'];
+    const items = [];
+    d.hipoteses.forEach((h,i)=>{
+      items.push(`<p class="doc-clause"><strong>(${letras[i]})</strong> ${h.texto};</p>`);
+    });
+    if(d.hipoteseCustom){
+      items.push(`<p class="doc-clause"><strong>(${letras[items.length]})</strong> ${d.hipoteseCustom};</p>`);
+    }
+    // ajusta última pontuação
+    listaFundamentos = items.map((item,idx)=>{
+      if(idx === items.length - 1) return item.replace(/;<\/p>$/, '.</p>');
+      return item;
+    }).join('');
+  } else {
+    listaFundamentos = '<p class="doc-clause"><em>[Selecione ao menos uma hipótese de recusa no formulário]</em></p>';
+  }
+
+  return `
+<p class="doc-title">CARTA DE RESPOSTA À REGULAÇÃO DE SINISTRO</p>
+
+<div class="doc-header">
+  <p>Sinistro nº ${d.sinistro} · Bilhete nº ${d.bilhete}</p>
+  <p>${d.cidade}, ${d.dataCarta}.</p>
+</div>
+
+<p>${sujTitular} <strong>${d.nome}</strong></p>
+<p>CPF nº ${d.cpf}</p>
+<p>Aparelho: ${d.aparelho} · IMEI nº ${d.imei}</p>
+
+<p style="margin-top:14pt">${pronome} Titular,</p>
+
+<p class="doc-clause">Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a <strong>impossibilidade de atender ao pedido de indenização</strong>, em razão de divergências materiais e objetivas que impedem a validação do evento comunicado e da documentação apresentada, nos termos das Condições Gerais do produto e da Lei nº 15.040/2024, aplicável ao contrato.</p>
+
+<p class="doc-clause">A decisão fundamenta-se nas seguintes constatações, apuradas durante a regulação e a liquidação do sinistro, na forma do art. 75 da Lei nº 15.040/2024:</p>
+
+${listaFundamentos}
+
+<p class="doc-clause">Diante da impossibilidade de validação material da aquisição e da pré-existência do bem, bem como da caracterização do evento coberto, o pedido de indenização resta <strong>indeferido</strong>, com fundamento nos ${artsStr}, da Lei nº 15.040/2024.</p>
+
+<p class="doc-clause">Esta decisão poderá ser objeto de reanálise mediante a apresentação de novos elementos, documentos e esclarecimentos adicionais sobre os fatos.</p>
+
+<p class="doc-clause">Nos termos dos arts. 82 e 83 da Lei nº 15.040/2024, o relatório de regulação e os documentos técnicos não sigilosos que fundamentam esta decisão encontram-se à disposição mediante solicitação formal, ressalvados os elementos protegidos por sigilo legal e os dados de terceiros.</p>
+
+<p class="doc-clause">O tratamento da devolução de valores será objeto de notificação própria. ${d.tratamento === 'Sr.' ? 'O Titular mantém' : 'A Titular mantém'} o direito de contestar esta decisão pelos canais de atendimento ou pelos órgãos competentes.</p>
+
+<p style="margin-top:14pt">Atenciosamente,</p>
+<p><strong>Dpto. de Regulação — Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda.</strong></p>
+`;
+}
+
+// ==================== RENDER: NOTIFICAÇÃO ====================
+function renderNotificacao(){
+  const d = getData();
+  const inscritaConcordancia = d.tratamento === 'Sr.' ? 'inscrito' : 'inscrita';
+  const residenteConcordancia = d.tratamento === 'Sr.' ? 'residente' : 'residente';
+  const titularArt = d.tratamento === 'Sr.' ? 'O Titular' : 'A Titular';
+
+  const restituicaoTexto = d.restituicao === 'sem_premio'
+    ? `Em atenção ao parâmetro restitutório do art. 6º da Lei nº 15.040/2024, não há valor de prêmio a ser restituído, considerando que a vigência contratual se encontra em seu período final, inexistindo período de risco não decorrido apto a ensejar restituição proporcional.`
+    : `Em atenção ao parâmetro restitutório do art. 6º da Lei nº 15.040/2024, será realizada a restituição proporcional do prêmio referente ao período de risco não decorrido, contado do recebimento desta notificação até o termo final da vigência originalmente contratada.`;
+
+  return `
+<p class="doc-title">NOTIFICAÇÃO DE RESOLUÇÃO DO CONTRATO DE PROTEÇÃO</p>
+
+<div class="doc-header">
+  <p>Bilhete nº ${d.bilhete} · Sinistro nº ${d.sinistro}</p>
+</div>
+
+<p class="doc-clause"><strong>1. IDENTIFICAÇÃO DAS PARTES</strong></p>
+
+<p class="doc-clause"><strong>Representante:</strong> Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda., inscrita no CNPJ/MF sob o nº 13.403.189/0001-05, na qualidade de representante da <strong>${d.seguradora.nome}</strong>, CNPJ nº ${d.seguradora.cnpj}, Processo SUSEP nº ${d.seguradora.susep}.</p>
+
+<p class="doc-clause"><strong>Titular:</strong> ${d.nome}, ${inscritaConcordancia} no CPF/MF sob o nº ${d.cpf}, ${residenteConcordancia} na ${d.endereco}.</p>
+
+<p class="doc-clause"><strong>2. OBJETO DA NOTIFICAÇÃO</strong></p>
+
+<p class="doc-clause">Esta notificação formaliza a resolução do Contrato de Proteção formalizado pelo Bilhete nº ${d.bilhete}, referente ao aparelho ${d.aparelho}, IMEI nº ${d.imei}, vinculado à proteção contratada por intermédio do parceiro.</p>
+
+<p class="doc-clause"><strong>3. FUNDAMENTAÇÃO E EFEITOS</strong></p>
+
+<p class="doc-clause">Após a conclusão da análise técnica do sinistro, comunicada por carta de resposta própria, verificou-se a impossibilidade de validação material da aquisição e da pré-existência do bem protegido, bem como da caracterização do evento comunicado, comprometendo pressuposto essencial da relação contratual de proteção.</p>
+
+<p class="doc-clause">Como consequência, ante a ausência de comprovação do interesse legítimo sobre o bem protegido, elemento essencial do contrato de seguro (art. 1º da Lei nº 15.040/2024), o contrato encontra-se resolvido, produzindo os seguintes efeitos: (a) cessação integral das coberturas a partir do recebimento desta notificação; (b) manutenção da negativa de indenização quanto ao Sinistro nº ${d.sinistro}, nos termos da carta de resposta à regulação; (c) extinção das obrigações recíprocas futuras.</p>
+
+<p class="doc-clause"><strong>4. CUMPRIMENTO LEGAL — RESTITUIÇÃO</strong></p>
+
+<p class="doc-clause">${restituicaoTexto} A Taxa de Utilização/Franquia, se efetivamente paga, será estornada integralmente. O estorno será realizado, preferencialmente, pela mesma forma de pagamento originalmente utilizada, inclusive por crédito no cartão, quando aplicável. Na impossibilidade de processamento pela forma original, a restituição será realizada por transferência bancária ou PIX para conta de titularidade exclusiva ${d.tratamento === 'Sr.' ? 'do Titular' : 'da Titular'}. Nessa hipótese, o pagamento será processado em até 10 (dez) dias úteis, contados do recebimento correto dos dados bancários, que deverão ser encaminhados ${d.tratamento === 'Sr.' ? 'pelo Titular' : 'pela Titular'} no prazo de 30 (trinta) dias corridos, contados do recebimento desta notificação. A devolução constitui obrigação decorrente da resolução e não representa acordo, transação, novação ou reconhecimento da regularidade do pedido, tampouco renúncia aos direitos da seguradora previstos em lei. ${titularArt} mantém o direito de contestar a decisão pelos canais de atendimento ou pelos órgãos competentes. A ausência de envio dos dados bancários não obsta ao encerramento do contrato, apenas sobrestará o repasse financeiro.</p>
+
+<p style="margin-top:14pt">${d.cidade}, ${d.dataCarta}.</p>
+
+<p style="margin-top:14pt">Atenciosamente,</p>
+<p><strong>Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda. — Departamento de Regulação</strong></p>
+`;
+}
+
+// ==================== RENDER PRINCIPAL ====================
+function render(){
+  document.getElementById('preview-carta').innerHTML = renderCarta();
+  document.getElementById('preview-notif').innerHTML = renderNotificacao();
+  const sel = document.getElementById('seguradora').value;
+  const s = SEGURADORAS[sel];
+  document.getElementById('seguradora-info').innerHTML =
+    `<span class="text-xs">CNPJ ${s.cnpj} · Processo SUSEP ${s.susep}</span>`;
+}
+
+// ==================== TABS ====================
+let currentTab = 'carta';
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab === tab));
+  document.getElementById('preview-carta').style.display = tab === 'carta' ? 'block' : 'none';
+  document.getElementById('preview-notif').style.display = tab === 'notif' ? 'block' : 'none';
+}
+
+// ==================== AÇÕES ====================
+function copyDoc(){
+  const el = currentTab === 'carta' ? document.getElementById('preview-carta') : document.getElementById('preview-notif');
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    toast('Copiado para a área de transferência');
+  });
+}
+
+function downloadDoc(){
+  const d = getData();
+  const el = currentTab === 'carta' ? document.getElementById('preview-carta') : document.getElementById('preview-notif');
+  const conteudo = el.innerHTML;
+  const nomeArquivo = currentTab === 'carta'
+    ? `CARTA_RESPOSTA_${d.nome.replace(/\s+/g,'_')}_SR${d.sinistro}.doc`
+    : `NOTIFICACAO_RESOLUCAO_${d.nome.replace(/\s+/g,'_')}_BILHETE${d.bilhete}.doc`;
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${nomeArquivo}</title>
+<style>body{font-family:'Times New Roman',serif;font-size:12pt;line-height:1.5;color:#000;max-width:16cm;margin:2cm auto;}p{margin:0 0 10pt 0;text-align:justify;}strong{font-weight:700;}.doc-title{font-weight:700;font-size:13pt;margin-bottom:14pt;text-align:center;}</style>
+</head><body>${conteudo}</body></html>`;
+  const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = nomeArquivo;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Documento baixado');
+}
+
+function toast(msg){
+  const t = document.createElement('div');
+  t.className = 'fixed bottom-6 right-6 bg-[var(--pitzi-ink)] text-white px-4 py-2 rounded-md text-sm shadow-lg z-50';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2000);
+}
+
+function resetForm(){
+  document.querySelectorAll('input[type=text], input[type=date], textarea').forEach(el=>{ if(el.id !== 'cidade') el.value=''; });
+  document.getElementById('cidade').value = 'São Paulo';
+  document.querySelectorAll('input[type=checkbox]').forEach(cb=>{ cb.checked = false; cb.closest('.checkbox-row').classList.remove('active'); });
+  document.querySelector('input[name=restituicao][value=sem_premio]').checked = true;
+  render();
+}
+
+function loadExample(){
+  document.getElementById('sinistro').value = '589299';
+  document.getElementById('bilhete').value = '4803277';
+  document.getElementById('dataCarta').value = '2026-07-14';
+  document.getElementById('nome').value = 'DALILA ARAUJO PESSOA';
+  document.getElementById('cpf').value = '880.343.642-15';
+  document.getElementById('tratamento').value = 'Sra.';
+  document.getElementById('endereco').value = 'Rua Exemplo, nº 100, Bairro Exemplo, Cidade/UF, CEP 00000-000';
+  document.getElementById('aparelho').value = 'Samsung Galaxy A16 4G 4/128';
+  document.getElementById('imei').value = '350792524225875';
+  document.getElementById('seguradora').value = 'kakau';
+  // Selecionar as duas hipóteses típicas da Dalila
+  ['divergencia_pagamento','bo_narrativa'].forEach(id=>{
+    const cb = document.querySelector(`input[data-hipotese="${id}"]`);
+    if(cb){ cb.checked = true; cb.closest('.checkbox-row').classList.add('active'); }
+  });
+  render();
+}
+
+// ==================== BOOT ====================
+initHipoteses();
+document.getElementById('dataCarta').value = new Date().toISOString().split('T')[0];
+render();
+</script>
+
+</body>
+</html>
