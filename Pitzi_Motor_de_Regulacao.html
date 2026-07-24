@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motor de Regulação · Pitzi — Cartas de Recusa e Notificações de Resolução</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a1128; --accent:#00b28f; --accent-dark:#008a6e; --accent-soft:#ecfdf5;
+    --warn:#c2410c; --danger:#b91c1c; --muted:#64748b; --bg:#f1f5f9; --card:#ffffff;
+    --border:#e2e8f0; --line:#cbd5e1;
+  }
+  *{box-sizing:border-box;}
+  html,body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);margin:0;}
+  /* ---------- Documento (espelha o modelo Word) ---------- */
+  .doc-sheet{font-family:'Tinos','Times New Roman',Georgia,serif;font-size:12pt;line-height:1.5;color:#111;background:#fff;}
+  .doc-sheet p{margin:0 0 10pt 0;text-align:justify;}
+  .doc-sheet strong{font-weight:700;}
+  .doc-sheet .doc-title{font-weight:700;font-size:13pt;margin-bottom:6pt;text-align:center;text-transform:uppercase;letter-spacing:.02em;}
+  .doc-sheet .doc-sub{text-align:center;font-size:11pt;color:#333;margin-bottom:16pt;}
+  .doc-sheet .doc-head p{margin:0 0 2pt 0;text-align:left;}
+  .doc-sheet .clause{margin-bottom:10pt;}
+  .doc-sheet .sig{margin-top:16pt;}
+  /* base legal por tópico */
+  .baselegal{font-family:'Inter',sans-serif;font-size:8.5pt;color:var(--accent-dark);background:var(--accent-soft);
+    border-left:3px solid var(--accent);padding:4px 8px;margin:-4pt 0 12pt 0;text-align:left;border-radius:0 4px 4px 0;line-height:1.35;}
+  .baselegal b{color:var(--ink);font-weight:600;}
+  .doc-sheet.hide-base .baselegal{display:none;}
+  /* letterhead */
+  .letterhead{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);padding-bottom:10px;margin-bottom:18pt;font-family:'Inter',sans-serif;}
+  .letterhead .lh-meta{font-size:8pt;color:var(--muted);text-align:right;line-height:1.4;}
+  .footer-doc{border-top:1px solid var(--line);margin-top:20pt;padding-top:8px;font-family:'Inter',sans-serif;font-size:8pt;color:var(--muted);text-align:center;}
+  /* ---------- UI ---------- */
+  .field-label{font-size:11px;font-weight:600;color:#334155;letter-spacing:.02em;text-transform:uppercase;}
+  .input-base{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;background:#fff;transition:border .15s,box-shadow .15s;}
+  .input-base:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,178,143,.15);}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;}
+  .section-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);}
+  .checkbox-row{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;transition:border-color .15s,background .15s;}
+  .checkbox-row:hover{border-color:var(--accent);background:#f0fdfa;}
+  .checkbox-row input[type=checkbox]{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex-shrink:0;}
+  .checkbox-row.active{border-color:var(--accent);background:var(--accent-soft);}
+  .badge{display:inline-block;padding:2px 8px;font-size:10px;font-weight:600;border-radius:4px;letter-spacing:.03em;}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid transparent;}
+  .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent-dark);}
+  .btn-primary:hover{background:var(--accent-dark);}
+  .btn-secondary{background:#fff;color:var(--ink);border-color:var(--border);}
+  .btn-secondary:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .tab-btn{padding:8px 14px;font-size:13px;font-weight:600;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;background:none;border-top:none;border-left:none;border-right:none;}
+  .tab-btn.active{color:var(--accent-dark);border-color:var(--accent);}
+  .navbtn{padding:8px 16px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:8px;}
+  .navbtn.active{background:var(--ink);color:#fff;}
+  .helper-text{font-size:11px;color:var(--muted);margin-top:4px;}
+  details summary{cursor:pointer;list-style:none;}
+  details summary::-webkit-details-marker{display:none;}
+  .divider-h{border-top:1px solid var(--border);margin:14px 0;}
+  .view{display:none;}
+  .view.active{display:block;}
+  .regime-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;}
+  .regime-lei{background:#dbeafe;color:#1e40af;}
+  .regime-ant{background:#fef3c7;color:#92400e;}
+  table.db{width:100%;border-collapse:collapse;font-size:13px;}
+  table.db th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--border);position:sticky;top:0;background:#fff;}
+  table.db td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+  table.db tr:hover td{background:#f8fafc;}
+  .trava-alert{border-left:3px solid var(--danger);background:#fef2f2;color:#7f1d1d;padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px;margin-bottom:8px;}
+  .trava-ok{border-left:3px solid var(--accent);background:var(--accent-soft);color:var(--accent-dark);padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px;}
+  .fl-card{border:1px solid var(--border);border-radius:8px;padding:12px;background:#fff;}
+  .fl-card .fl-art{font-weight:800;color:var(--accent-dark);}
+  .calc-line{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px dashed var(--border);}
+  .calc-line b{font-variant-numeric:tabular-nums;}
+  @media print{.no-print{display:none !important;} body{background:#fff;} .doc-sheet{box-shadow:none !important;border:none !important;}}
+  @page{size:A4;margin:2cm;}
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ============ HEADER ============ -->
+<header class="no-print border-b border-slate-200 bg-white sticky top-0 z-30">
+  <div class="max-w-[1500px] mx-auto px-6 py-3 flex items-center justify-between gap-4 flex-wrap">
+    <div class="flex items-center gap-3">
+      <!-- Logo Pitzi (SVG inline, autocontido) -->
+      <svg width="86" height="30" viewBox="0 0 172 60" xmlns="http://www.w3.org/2000/svg" aria-label="Pitzi">
+        <g fill="#00b28f">
+          <path d="M6 12h13c9 0 15 5 15 13s-6 13-15 13h-6v8H6V12zm7 8v10h5c4 0 6-2 6-5s-2-5-6-5h-5z"/>
+          <rect x="40" y="12" width="7" height="34"/>
+          <path d="M56 20h5v-8h7v8h7v7h-7v9c0 2 1 3 3 3h4v7h-6c-6 0-8-3-8-8V27h-5v-7z"/>
+          <path d="M84 20h26v6L94 39h16v7H83v-6l16-13H84z"/>
+          <rect x="116" y="20" width="7" height="26"/>
+        </g>
+        <circle cx="119.5" cy="14" r="4" fill="#0a1128"/>
+      </svg>
+      <div class="hidden sm:block border-l border-slate-200 pl-3">
+        <div class="text-sm font-bold tracking-tight leading-tight">Motor de Regulação</div>
+        <div class="text-[11px] text-slate-500 leading-tight">Jurídico · Legal Ops · Departamento de Regulação</div>
+      </div>
+    </div>
+    <nav class="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
+      <button class="navbtn active" data-view="gerador" onclick="switchView('gerador')">Gerador</button>
+      <button class="navbtn" data-view="banco" onclick="switchView('banco')">Banco de dados</button>
+      <button class="navbtn" data-view="fundamentos" onclick="switchView('fundamentos')">Fundamentos legais</button>
+      <button class="navbtn" data-view="sobre" onclick="switchView('sobre')">Regimes</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ VIEW: GERADOR ============ -->
+<main id="view-gerador" class="view active max-w-[1500px] mx-auto px-6 py-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+  <!-- COLUNA 1 · FORMULÁRIO -->
+  <section class="space-y-4 no-print">
+    <div class="flex items-center justify-between">
+      <h1 class="text-lg font-bold">Emissão de documento</h1>
+      <div class="flex gap-2">
+        <button onclick="loadExemplo()" class="btn btn-secondary text-xs">Carregar exemplo</button>
+        <button onclick="resetForm()" class="btn btn-secondary text-xs">Limpar</button>
+      </div>
+    </div>
+
+    <!-- Regime jurídico -->
+    <div class="card p-5">
+      <div class="section-title mb-3">Regime jurídico aplicável</div>
+      <div class="grid grid-cols-2 gap-3 items-end">
+        <div>
+          <label class="field-label">Data de emissão do bilhete</label>
+          <input type="date" id="dataEmissao" class="input-base mt-1" oninput="autoRegime();render()">
+          <div class="helper-text">Corte legal: <b>11/12/2025</b> (vigência da Lei 15.040).</div>
+        </div>
+        <div>
+          <label class="field-label">Regime</label>
+          <select id="regime" class="input-base mt-1" onchange="render()">
+            <option value="lei15040">Lei n.º 15.040/2024</option>
+            <option value="anterior">Regime anterior (CC art. 766 + Circular 621/2021)</option>
+          </select>
+          <div class="helper-text" id="regimeHint"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. Sinistro -->
+    <div class="card p-5">
+      <div class="section-title mb-3">1 · Identificação do sinistro</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="field-label">N.º do Sinistro</label><input type="text" id="sinistro" class="input-base mt-1" placeholder="Ex.: 589299" oninput="render()"></div>
+        <div><label class="field-label">N.º do Bilhete</label><input type="text" id="bilhete" class="input-base mt-1" placeholder="Ex.: 4803277" oninput="render()"></div>
+        <div><label class="field-label">Data da carta</label><input type="date" id="dataCarta" class="input-base mt-1" oninput="render()"></div>
+        <div><label class="field-label">Cidade de emissão</label><input type="text" id="cidade" class="input-base mt-1" value="São Paulo" oninput="render()"></div>
+      </div>
+    </div>
+
+    <!-- 2. Titular -->
+    <div class="card p-5">
+      <div class="section-title mb-3">2 · Dados do titular</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2"><label class="field-label">Nome completo</label><input type="text" id="nome" class="input-base mt-1" placeholder="Nome do titular" oninput="render()"></div>
+        <div><label class="field-label">CPF</label><input type="text" id="cpf" class="input-base mt-1" placeholder="000.000.000-00" oninput="render()"></div>
+        <div><label class="field-label">Tratamento</label>
+          <select id="tratamento" class="input-base mt-1" onchange="render()"><option value="Sr.">Sr.</option><option value="Sra." selected>Sra.</option></select>
+        </div>
+        <div class="col-span-2"><label class="field-label">Endereço completo</label><input type="text" id="endereco" class="input-base mt-1" placeholder="Rua, n.º, bairro, cidade/UF, CEP" oninput="render()"><div class="helper-text">Usado apenas na Notificação de Resolução.</div></div>
+      </div>
+    </div>
+
+    <!-- 3. Aparelho + evento -->
+    <div class="card p-5">
+      <div class="section-title mb-3">3 · Aparelho e evento</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2"><label class="field-label">Descrição do aparelho</label><input type="text" id="aparelho" class="input-base mt-1" placeholder="Ex.: Apple iPhone 15 128GB" oninput="render()"></div>
+        <div><label class="field-label">IMEI</label><input type="text" id="imei" class="input-base mt-1" placeholder="Ex.: 350792524225875" oninput="render()"></div>
+        <div><label class="field-label">Tipo de evento</label>
+          <select id="evento" class="input-base mt-1" onchange="render()">
+            <option>Roubo</option><option>Furto qualificado</option><option>Furto simples</option>
+            <option>Perda / extravio</option><option>Quebra acidental</option><option>Defeito funcional</option>
+          </select>
+        </div>
+        <div><label class="field-label">Data do evento</label><input type="date" id="dataEvt" class="input-base mt-1" oninput="render()"></div>
+      </div>
+    </div>
+
+    <!-- 4. Seguradora -->
+    <div class="card p-5">
+      <div class="section-title mb-3">4 · Seguradora parceira</div>
+      <select id="seguradora" class="input-base mt-1" onchange="render()">
+        <option value="kakau">Kakau Seguradora S.A.</option>
+        <option value="generali">Generali Brasil Seguros S.A.</option>
+        <option value="gazin">Gazin Seguros</option>
+        <option value="mapfre">Mapfre Seguros Gerais S.A.</option>
+      </select>
+      <div class="helper-text mt-2" id="seguradora-info"></div>
+    </div>
+
+    <!-- 5. Fundamentos -->
+    <div class="card p-5">
+      <div class="section-title mb-2">5 · Fundamentos da recusa</div>
+      <p class="text-xs text-slate-500 mb-3">Selecione as hipóteses aplicáveis. A carta é montada com numeração (a), (b), (c)… e a base legal correspondente ao regime escolhido é elencada em cada tópico.</p>
+      <div class="space-y-2" id="hipoteses-container"></div>
+      <details class="mt-3">
+        <summary class="text-xs font-semibold text-[var(--accent-dark)]">▸ Hipótese customizada (texto livre)</summary>
+        <div class="mt-2"><textarea id="hipoteseCustom" rows="3" class="input-base" placeholder="Texto adicional acrescido ao final da lista de fundamentos." oninput="render()"></textarea></div>
+      </details>
+    </div>
+
+    <!-- 6. Restituição -->
+    <div class="card p-5">
+      <div class="section-title mb-3">6 · Restituição (Notificação de Resolução)</div>
+      <div class="space-y-2 mb-3">
+        <label class="checkbox-row"><input type="radio" name="restituicao" value="sem_premio" checked onchange="render()"><div><div class="text-sm font-semibold">Sem prêmio a restituir</div><div class="text-xs text-slate-500">Vigência em período final — sem período de risco não decorrido.</div></div></label>
+        <label class="checkbox-row"><input type="radio" name="restituicao" value="proporcional" onchange="render()"><div><div class="text-sm font-semibold">Restituição proporcional</div><div class="text-xs text-slate-500">Há período de risco não decorrido — cálculo automático abaixo.</div></div></label>
+        <label class="checkbox-row"><input type="radio" name="restituicao" value="integral" onchange="render()"><div><div class="text-sm font-semibold">Restituição integral (liberalidade)</div><div class="text-xs text-slate-500">Devolução integral, condição mais favorável ao titular.</div></div></label>
+        <label class="checkbox-row"><input type="radio" name="restituicao" value="retencao" onchange="render()"><div><div class="text-sm font-semibold">Retenção (dolo/má-fé)</div><div class="text-xs text-slate-500">Sem devolução. Verifica a trava T-08.</div></div></label>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <div><label class="field-label">Prêmio total (R$)</label><input type="text" id="premio" class="input-base mt-1" placeholder="0,00" oninput="render()"></div>
+        <div><label class="field-label">Início de vigência</label><input type="date" id="vigIni" class="input-base mt-1" oninput="render()"></div>
+        <div><label class="field-label">Fim de vigência</label><input type="date" id="vigFim" class="input-base mt-1" oninput="render()"></div>
+      </div>
+      <div class="helper-text">Deixe início/fim em branco para usar apenas o texto padrão sem valor calculado.</div>
+      <div id="calc-box" class="mt-3"></div>
+    </div>
+  </section>
+
+  <!-- COLUNA 2 · PREVIEW -->
+  <section class="space-y-4 lg:sticky lg:top-[76px] lg:self-start">
+    <div class="card overflow-hidden">
+      <div class="no-print border-b border-slate-200 px-4 pt-2 flex items-center justify-between flex-wrap gap-2">
+        <div class="flex gap-1">
+          <button class="tab-btn active" data-tab="carta" onclick="switchTab('carta')">Carta de Resposta</button>
+          <button class="tab-btn" data-tab="notif" onclick="switchTab('notif')">Notificação de Resolução</button>
+        </div>
+        <div class="flex gap-2 pb-2 items-center">
+          <label class="flex items-center gap-1 text-xs text-slate-500 cursor-pointer mr-1"><input type="checkbox" id="toggleBase" checked onchange="toggleBaseLegal()" class="accent-teal-600"> Base legal</label>
+          <button onclick="copyDoc()" class="btn btn-secondary text-xs">Copiar</button>
+          <button onclick="printDoc()" class="btn btn-secondary text-xs">Imprimir</button>
+          <button onclick="downloadDoc()" class="btn btn-primary text-xs">Baixar .doc</button>
+        </div>
+      </div>
+      <div class="p-6 max-h-[82vh] overflow-y-auto bg-slate-100">
+        <div id="sheet" class="doc-sheet mx-auto bg-white shadow-sm" style="max-width:18cm;padding:2cm 2.2cm;">
+          <div id="preview-carta"></div>
+          <div id="preview-notif" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Travas -->
+    <div class="card p-4 no-print">
+      <div class="section-title mb-2">Verificação de travas jurídicas</div>
+      <div id="travas-box"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ VIEW: BANCO DE DADOS ============ -->
+<div id="view-banco" class="view max-w-[1500px] mx-auto px-6 py-6">
+  <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+    <div>
+      <h1 class="text-lg font-bold">Banco de dados · cartas emitidas</h1>
+      <p class="text-sm text-slate-500" id="banco-count"></p>
+    </div>
+    <input type="text" id="buscaBanco" class="input-base max-w-xs" placeholder="Buscar por nome, CPF, bilhete, sinistro…" oninput="renderBanco()">
+  </div>
+  <div class="card overflow-hidden">
+    <div class="max-h-[70vh] overflow-y-auto">
+      <table class="db"><thead><tr>
+        <th>#</th><th>Titular</th><th>CPF</th><th>Seguradora</th><th>Bilhete / Sinistro</th><th>Aparelho</th><th>Documentos</th><th></th>
+      </tr></thead><tbody id="banco-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VIEW: FUNDAMENTOS ============ -->
+<div id="view-fundamentos" class="view max-w-[1500px] mx-auto px-6 py-6">
+  <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+    <div>
+      <h1 class="text-lg font-bold">Fundamentos legais</h1>
+      <p class="text-sm text-slate-500">Fonte de consulta (aba 06B do Motor). Texto oficial, quando usar e status de validação.</p>
+    </div>
+    <div class="flex gap-2">
+      <select id="filtroRegimeFL" class="input-base max-w-[240px]" onchange="renderFundamentos()">
+        <option value="todos">Todos os regimes</option>
+        <option value="lei15040">Lei 15.040/2024</option>
+        <option value="anterior">Regime anterior (CC + Circular)</option>
+        <option value="ambos">Comum aos dois</option>
+      </select>
+      <input type="text" id="buscaFL" class="input-base max-w-xs" placeholder="Buscar artigo, ementa…" oninput="renderFundamentos()">
+    </div>
+  </div>
+  <div id="fl-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+</div>
+
+<!-- ============ VIEW: REGIMES ============ -->
+<div id="view-sobre" class="view max-w-[1100px] mx-auto px-6 py-6 space-y-4">
+  <h1 class="text-lg font-bold">Escolha do regime jurídico</h1>
+  <div class="card p-5">
+    <p class="text-sm text-slate-700 mb-3">O sistema aplica o regime conforme a <b>data de emissão do bilhete</b>, com corte em <b>11/12/2025</b> (entrada em vigor da Lei n.º 15.040/2024). A escolha pode ser sobreposta manualmente, mas a trava <b>T-38</b> alerta quando um bilhete anterior ao corte é tratado pela lei nova.</p>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="border border-blue-200 rounded-lg p-4 bg-blue-50">
+        <div class="regime-pill regime-lei mb-2">Lei n.º 15.040/2024</div>
+        <p class="text-sm text-slate-700">Bilhetes emitidos <b>a partir de 11/12/2025</b>. Base: interesse legítimo (arts. 1.º e 5.º), restituição (art. 6.º), dever de informar (arts. 44 e 66), ônus da prova (art. 59), regulação (arts. 75 e 76), documentos (arts. 82 e 83), motivação (art. 86, §6.º), princípio indenitário (arts. 81, 89 e 90).</p>
+      </div>
+      <div class="border border-amber-200 rounded-lg p-4 bg-amber-50">
+        <div class="regime-pill regime-ant mb-2">Regime anterior</div>
+        <p class="text-sm text-slate-700">Bilhetes emitidos <b>antes de 11/12/2025</b>. Base: Código Civil (arts. 757, 765, 766, 768, 778, 781, 782), Circular SUSEP n.º 621/2021 (arts. 33, 34 e 43) e Súmula 616 do STJ. Cancelamento eficaz 30 dias após a notificação, com restituição proporcional.</p>
+      </div>
+    </div>
+    <p class="text-xs text-slate-500 mt-4">Regra de ouro (T-35/T-40): onde a Condição Geral antiga conflitar com a Lei 15.040, prevalece a Lei e a leitura mais favorável ao segurado (art. 9.º, §2.º, e art. 59). O art. 6.º é <b>parâmetro restitutório</b>, nunca a causa da extinção.</p>
+  </div>
+  <div class="card p-5">
+    <div class="section-title mb-2">Seguradoras cadastradas</div>
+    <div id="sobre-seg" class="space-y-3 text-sm"></div>
+  </div>
+</div>
+
+<footer class="no-print text-center text-xs text-slate-400 py-8">
+  Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda. · CNPJ 13.403.189/0001-05 · Departamento de Regulação<br>
+  Motor de Regulação — fundamentos assinalados como <em>Validar</em> devem ser conferidos na fonte oficial antes do uso em produção.
+</footer>
+<script>
+// === MÓDULO DE DADOS · Sistema Pitzi de Regulação (Lei 15.040 x Regime Anterior) ===
+const SEGURADORAS = {
+ "kakau": {
+  "nome": "Kakau Seguradora S.A.",
+  "cnpj": "43.409.064/0001-53",
+  "susep": "15414.609920/2022-17",
+  "regimeNota": "Aplica-se integralmente a Lei n.º 15.040/2024 aos bilhetes emitidos a partir de 11/12/2025. Bilhetes anteriores: art. 766 do Código Civil + Circular SUSEP 621/2021.",
+  "franquia": "Decrescente: 30% até 6 meses, 25% do 7º ao 12º, 20% do 13º ao 24º, 10% do 24º ao 36º, 0% a partir do 37º mês.",
+  "cobre": "Não cobre furto simples nem perda."
+ },
+ "generali": {
+  "nome": "Generali Brasil Seguros S.A.",
+  "cnpj": "33.072.307/0001-57",
+  "susep": "15414.900378/2018-58",
+  "regimeNota": "Estrutura coletiva (Apólice + Certificado Individual + Estipulante). Ambas as versões de CG são pós-Lei 15.040. Onde a CG conflitar com a Lei, prevalece a Lei (art. 9º, §2º, e art. 59).",
+  "franquia": "Percentual ou valor fixo definido no bilhete.",
+  "cobre": "Furto simples e perda somente com Cláusula Particular ratificada + rastreador."
+ },
+ "gazin": {
+  "nome": "Gazin Seguros",
+  "cnpj": "28.414.401/0001-07",
+  "susep": "15414.612190/2020-70",
+  "regimeNota": "CG de 2020, anterior à Lei 15.040. Bilhetes a partir de 11/12/2025 regidos pela Lei 15.040 no que for mais favorável. Circular SUSEP 621/2021 validada.",
+  "franquia": "Percentual definido no bilhete, pago à vista por sinistro.",
+  "cobre": "Cobre furto simples (exclusivo eletrônicos), defeitos funcionais, danos de causa externa, bolsa protegida."
+ },
+ "mapfre": {
+  "nome": "Mapfre Seguros Gerais S.A.",
+  "cnpj": "61.074.175/0001-38",
+  "susep": "15414.900001/2000-00",
+  "regimeNota": "Confirmar regime pela data de emissão do bilhete.",
+  "franquia": "Conforme bilhete.",
+  "cobre": "Conforme condições gerais."
+ }
+};
+const REGIMES = {
+ "lei15040": {
+  "codigo": "lei15040",
+  "nome": "Lei n.º 15.040/2024 (Marco Legal dos Seguros)",
+  "curto": "Lei 15.040/2024",
+  "vigencia": "Em vigor desde 11/12/2025. Aplica-se a contratos/bilhetes com emissão a partir dessa data.",
+  "citacoes": {
+   "INTERESSE": "arts. 1.º e 5.º da Lei n.º 15.040/2024",
+   "RESTITUICAO": "art. 6.º da Lei n.º 15.040/2024",
+   "NULIDADE": "art. 11 da Lei n.º 15.040/2024",
+   "DESAPARECIMENTO": "art. 12 da Lei n.º 15.040/2024",
+   "REGULACAO": "art. 75 da Lei n.º 15.040/2024",
+   "COMPETENCIA_REG": "art. 76 da Lei n.º 15.040/2024",
+   "MOTIVACAO": "art. 86, § 6.º, da Lei n.º 15.040/2024",
+   "DOC_ACESSO": "arts. 82 e 83 da Lei n.º 15.040/2024",
+   "INFO_CONTRATACAO": "art. 44, § 1.º, da Lei n.º 15.040/2024",
+   "INFO_SINISTRO": "art. 66 da Lei n.º 15.040/2024",
+   "ONUS_EXCLUSAO": "art. 59 da Lei n.º 15.040/2024",
+   "INDENITARIO": "arts. 81, 89 e 90 da Lei n.º 15.040/2024",
+   "CUMULATIVO": "art. 36, § 1.º, da Lei n.º 15.040/2024",
+   "AGRAVAMENTO": "arts. 13, 14 e 16 da Lei n.º 15.040/2024",
+   "FRAUDE": "art. 69 da Lei n.º 15.040/2024",
+   "MORA": "art. 20 da LCS c/c a Súmula 616 do STJ",
+   "OBJETO": "art. 1.º da Lei n.º 15.040/2024"
+  }
+ },
+ "anterior": {
+  "codigo": "anterior",
+  "nome": "Regime anterior — Código Civil (art. 766) + Circular SUSEP 621/2021",
+  "curto": "Regime anterior (CC + Circular 621/2021)",
+  "vigencia": "Aplicável a bilhetes EMITIDOS antes de 11/12/2025, por ato jurídico perfeito (trava T-38). Arts. 757 a 802 do CC revogados prospectivamente pela Lei 15.040/2024, art. 133.",
+  "citacoes": {
+   "INTERESSE": "arts. 757 e 765 do Código Civil",
+   "RESTITUICAO": "art. 766, parágrafo único, do Código Civil c/c art. 34 da Circular SUSEP n.º 621/2021",
+   "NULIDADE": "art. 762 do Código Civil",
+   "DESAPARECIMENTO": "art. 766 do Código Civil c/c art. 34 da Circular SUSEP n.º 621/2021",
+   "REGULACAO": "art. 43 da Circular SUSEP n.º 621/2021",
+   "COMPETENCIA_REG": "art. 43 da Circular SUSEP n.º 621/2021",
+   "MOTIVACAO": "art. 765 do Código Civil (boa-fé objetiva) c/c art. 43 da Circular SUSEP n.º 621/2021",
+   "DOC_ACESSO": "art. 6.º, incisos III e VIII, do Código de Defesa do Consumidor",
+   "INFO_CONTRATACAO": "art. 766 do Código Civil",
+   "INFO_SINISTRO": "art. 768 do Código Civil",
+   "ONUS_EXCLUSAO": "art. 6.º, VIII, e art. 47 do Código de Defesa do Consumidor",
+   "INDENITARIO": "arts. 778 e 781 do Código Civil",
+   "CUMULATIVO": "art. 782 do Código Civil",
+   "AGRAVAMENTO": "art. 768 do Código Civil",
+   "FRAUDE": "art. 766 do Código Civil c/c art. 762 do Código Civil",
+   "MORA": "Súmula 616 do STJ c/c arts. 33 e 34 da Circular SUSEP n.º 621/2021",
+   "OBJETO": "art. 757 do Código Civil"
+  }
+ }
+};
+const FUNDAMENTOS_LEGAIS = [
+ {
+  "id": "FL-1",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "1.º",
+  "ementa": "Objeto do contrato — interesse legítimo",
+  "texto": "Pelo contrato de seguro, a seguradora obriga-se, mediante o pagamento do prêmio, a garantir interesse legítimo do segurado ou do beneficiário contra riscos predeterminados.",
+  "quando": "Causa da resolução quando o interesse legítimo não se comprova (c/c FL-5).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-5",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "5.º",
+  "ementa": "Eficácia depende do interesse legítimo",
+  "texto": "A eficácia do contrato depende da existência de interesse legítimo; interesse impossível torna o contrato nulo.",
+  "quando": "Pré-existência/propriedade não comprovada (c/c FL-1).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-6",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "6.º",
+  "ementa": "Parâmetro restitutório",
+  "texto": "Extinto o interesse, resolve-se o contrato com a redução proporcional do prêmio, ressalvado o direito da seguradora às despesas de contratação.",
+  "quando": "Regra de devolução de prêmio. NUNCA como CAUSA da extinção (trava T-40).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-7",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "7.º",
+  "ementa": "Restituição em contrato nulo",
+  "texto": "Contrato nulo ou ineficaz: devolução do prêmio deduzidas despesas, salvo prova de má-fé (sem devolução).",
+  "quando": "Tese de nulidade (c/c FL-11).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-9",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "9.º, §5.º",
+  "ementa": "Vedada extinção unilateral",
+  "texto": "O contrato não pode conter cláusula que permita extinção unilateral pela seguradora fora das hipóteses legais.",
+  "quando": "Base da nomenclatura 'Notificação de Resolução' e da trava T-35.",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-11",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "11",
+  "ementa": "Nulidade — risco já realizado",
+  "texto": "O contrato é nulo quando qualquer das partes souber, na conclusão, que o risco é impossível ou já se realizou; quem sabia paga o dobro do prêmio.",
+  "quando": "Só com datas comprovadas (Q12.1 posterior ao risco). Revisão jurídica OBRIGATÓRIA (T-31).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-12",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "12",
+  "ementa": "Desaparecimento do risco",
+  "texto": "Desaparecido o risco, resolve-se o contrato com redução do prêmio equivalente ao risco a decorrer.",
+  "quando": "Perda de pressuposto/interesse.",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-36",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "36, §1.º",
+  "ementa": "Seguro cumulativo",
+  "texto": "Nos seguros cumulativos de dano, o segurado deve comunicar a cada seguradora a existência dos demais contratos.",
+  "quando": "Omissão de outro seguro. Exige prova do outro contrato (T-32).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-44",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "44, §1.º",
+  "ementa": "Dever de informar na contratação",
+  "texto": "Descumprimento doloso do dever de informar na contratação: perda da garantia, mantido o prêmio como dívida. Culposo: redução proporcional.",
+  "quando": "Declaração inexata/omissão na contratação. Imputar dolo exige prova robusta.",
+  "status": "Validado (dolo)"
+ },
+ {
+  "id": "FL-59",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "59",
+  "ementa": "Ônus da prova das exclusões",
+  "texto": "Exclusões e perdas de direito têm interpretação restritiva; cabe à seguradora a prova do suporte fático.",
+  "quando": "Régua probatória de toda recusa/resolução.",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-66",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "66",
+  "ementa": "Dever de informar no sinistro",
+  "texto": "Dever de informação na fase de sinistro; doloso perde a garantia e mantém o prêmio; culposo reduz.",
+  "quando": "Omissão ou inexatidão durante a regulação.",
+  "status": "Validado (dolo)"
+ },
+ {
+  "id": "FL-69",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "69",
+  "ementa": "Provocação dolosa do sinistro",
+  "texto": "Sinistro provocado dolosamente: perde o direito, mantém a dívida de prêmio e ressarce despesas.",
+  "quando": "Prova robusta de provocação. RETENÇÃO de prêmio, nunca devolução (T-08).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-75",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "75",
+  "ementa": "Regulação e liquidação",
+  "texto": "A reclamação abre a regulação, que apura causas, efeitos e valores devidos.",
+  "quando": "Contextualiza o procedimento na carta (procedimental).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-76",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "76",
+  "ementa": "Competência da seguradora",
+  "texto": "A regulação é da seguradora; o sindicante pode ser contratado, mas a DECISÃO é da seguradora.",
+  "quando": "Enquadra o papel do sindicante.",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-81",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "81",
+  "ementa": "Vedação ao enriquecimento",
+  "texto": "Em dúvida sobre critérios de apuração, prevalece o mais favorável ao segurado; vedado o enriquecimento sem causa.",
+  "quando": "Dupla indenização; ausência de prejuízo (c/c FL-89/90).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-82",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "82",
+  "ementa": "Relatório é documento comum",
+  "texto": "O relatório de regulação e liquidação é documento comum às partes.",
+  "quando": "Cláusula de acesso a documentos.",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-83",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "83",
+  "ementa": "Entrega de documentos na negativa",
+  "texto": "Negada a cobertura, a seguradora entrega os documentos que fundamentam a decisão, ressalvado o sigiloso.",
+  "quando": "Cláusula padrão de disponibilização nas cartas.",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-86",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "86, §6.º",
+  "ementa": "Recusa expressa e motivada",
+  "texto": "Decisão em 30 dias, fundamentada; o fundamento declarado trava a seguradora — não pode inovar depois, salvo fato novo.",
+  "quando": "Toda recusa: o motivo escrito é definitivo (T-02).",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-89",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "89",
+  "ementa": "Princípio indenitário",
+  "texto": "Os valores da garantia e da indenização não podem superar o valor do interesse.",
+  "quando": "Dupla indenização; ausência de prejuízo.",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-90",
+  "regime": "lei15040",
+  "norma": "Lei 15.040/2024",
+  "art": "90",
+  "ementa": "Limite da garantia (LMI)",
+  "texto": "A indenização não pode exceder o valor da garantia, ainda que o interesse lhe seja superior.",
+  "quando": "Limitar ao LMI contratado.",
+  "status": "Validado"
+ },
+ {
+  "id": "FL-20",
+  "regime": "lei15040",
+  "norma": "LCS",
+  "art": "20",
+  "ementa": "Mora do prêmio",
+  "texto": "Mora da 1ª parcela resolve de pleno direito; demais parcelas suspendem a garantia só após notificação com prazo de 15 dias.",
+  "quando": "Inadimplemento do prêmio (c/c Súmula 616).",
+  "status": "Validado"
+ },
+ {
+  "id": "CC-757",
+  "regime": "anterior",
+  "norma": "Código Civil",
+  "art": "757",
+  "ementa": "Objeto do seguro",
+  "texto": "Pelo contrato de seguro, o segurador se obriga a garantir interesse legítimo do segurado contra riscos predeterminados.",
+  "quando": "Equivalente ao art. 1.º da Lei 15.040 no regime anterior.",
+  "status": "Validado"
+ },
+ {
+  "id": "CC-765",
+  "regime": "anterior",
+  "norma": "Código Civil",
+  "art": "765",
+  "ementa": "Boa-fé objetiva",
+  "texto": "Segurado e segurador guardarão na conclusão e execução a mais estrita boa-fé e veracidade.",
+  "quando": "Base da motivação e do dever de veracidade no regime anterior.",
+  "status": "Validado"
+ },
+ {
+  "id": "CC-766",
+  "regime": "anterior",
+  "norma": "Código Civil",
+  "art": "766",
+  "ementa": "Declarações inexatas / restituição",
+  "texto": "Declarações inexatas ou omissão de circunstâncias: perda da garantia + prêmio vencido; sem má-fé, o segurador resolve o contrato ou cobra a diferença do prêmio.",
+  "quando": "Dever de informar na contratação e parâmetro de restituição (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "CC-768",
+  "regime": "anterior",
+  "norma": "Código Civil",
+  "art": "768",
+  "ementa": "Agravamento do risco",
+  "texto": "O segurado perde o direito à garantia se agravar intencionalmente o risco.",
+  "quando": "Agravamento / dever de informar no sinistro (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "CC-778",
+  "regime": "anterior",
+  "norma": "Código Civil",
+  "art": "778",
+  "ementa": "Limite da garantia",
+  "texto": "Nos seguros de dano, a garantia não pode ultrapassar o valor do interesse no momento da conclusão.",
+  "quando": "Princípio indenitário (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "CC-781",
+  "regime": "anterior",
+  "norma": "Código Civil",
+  "art": "781",
+  "ementa": "Limite da indenização",
+  "texto": "A indenização não pode ultrapassar o valor do interesse no momento do sinistro nem o limite máximo da garantia.",
+  "quando": "Princípio indenitário / LMI (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "CC-782",
+  "regime": "anterior",
+  "norma": "Código Civil",
+  "art": "782",
+  "ementa": "Seguro cumulativo",
+  "texto": "O segurado que contratar mais de um seguro sobre o mesmo interesse deve comunicar a intenção a cada segurador.",
+  "quando": "Omissão de outro seguro (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "C621-33",
+  "regime": "anterior",
+  "norma": "Circular SUSEP 621/2021",
+  "art": "33",
+  "ementa": "Falta de pagamento",
+  "texto": "As condições contratuais devem dispor sobre as consequências da falta de pagamento e a comunicação prévia antes do cancelamento.",
+  "quando": "Inadimplemento (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "C621-34",
+  "regime": "anterior",
+  "norma": "Circular SUSEP 621/2021",
+  "art": "34",
+  "ementa": "Cancelamento por mora / restituição",
+  "texto": "No prêmio periódico, a seguradora pode cancelar ou suspender a garantia; cancelamento eficaz 30 dias após a notificação, com restituição proporcional; vedada a cobrança de prêmio do período suspenso.",
+  "quando": "Cancelamento e restituição (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "C621-43",
+  "regime": "anterior",
+  "norma": "Circular SUSEP 621/2021",
+  "art": "43",
+  "ementa": "Prazo de liquidação",
+  "texto": "Prazo de 30 dias para liquidação a partir da entrega da documentação.",
+  "quando": "Procedimento de regulação (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "CDC-6",
+  "regime": "anterior",
+  "norma": "CDC",
+  "art": "6.º, III e VIII",
+  "ementa": "Informação e ônus da prova",
+  "texto": "Direito à informação adequada e à inversão do ônus da prova em favor do consumidor.",
+  "quando": "Acesso a documentos e ônus da prova (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "CDC-47",
+  "regime": "anterior",
+  "norma": "CDC",
+  "art": "47",
+  "ementa": "Interpretação pró-consumidor",
+  "texto": "As cláusulas contratuais serão interpretadas de maneira mais favorável ao consumidor.",
+  "quando": "Interpretação restritiva das exclusões (regime anterior).",
+  "status": "Validado"
+ },
+ {
+  "id": "S616",
+  "regime": "ambos",
+  "norma": "Súmula 616 STJ",
+  "art": "—",
+  "ementa": "Mora exige notificação prévia",
+  "texto": "A indenização é devida quando ausente a comunicação prévia do segurado acerca do atraso no pagamento do prêmio.",
+  "quando": "Negativa por inadimplemento (T-37).",
+  "status": "Validado"
+ }
+];
+const HIPOTESES = [
+ {
+  "id": "fiscal_inconsistencia",
+  "cat": "fiscal",
+  "label": "NF com inconsistências cadastrais/operacionais",
+  "texto": "o documento fiscal apresentado para comprovação da aquisição do bem contém inconsistências cadastrais e operacionais objetivas, verificadas em registros públicos, que impedem a utilização do documento como comprovação suficiente da aquisição e da pré-existência do bem protegido",
+  "conceitos": [
+   "REGULACAO",
+   "INTERESSE"
+  ]
+ },
+ {
+  "id": "fiscal_nao_comprova",
+  "cat": "fiscal",
+  "label": "NF não comprova aquisição/preexistência",
+  "texto": "a documentação fiscal apresentada não comprova a efetiva aquisição e a preexistência do bem na forma declarada",
+  "conceitos": [
+   "INTERESSE",
+   "REGULACAO"
+  ]
+ },
+ {
+  "id": "divergencia_pagamento",
+  "cat": "fiscal",
+  "label": "Divergência valor/destinatário/modalidade de pagamento",
+  "texto": "a documentação financeira apresentada não comprova a efetiva quitação da operação descrita na nota fiscal, por divergências de valor, destinatário ou modalidade de pagamento",
+  "conceitos": [
+   "INTERESSE",
+   "REGULACAO"
+  ]
+ },
+ {
+  "id": "pagamento_especie",
+  "cat": "fiscal",
+  "label": "Pagamento em espécie sem quitação rastreável",
+  "texto": "o pagamento declarado, realizado integralmente em espécie, não veio acompanhado de comprovante de quitação rastreável, o que, somado às demais circunstâncias, inviabiliza a verificação material da operação de aquisição",
+  "conceitos": [
+   "REGULACAO"
+  ]
+ },
+ {
+  "id": "nf_posterior_evento",
+  "cat": "fiscal",
+  "label": "NF emitida em data posterior ao evento",
+  "texto": "a nota fiscal foi emitida em data posterior ao evento comunicado, comprometendo a comprovação da preexistência do bem",
+  "conceitos": [
+   "INTERESSE",
+   "REGULACAO"
+  ]
+ },
+ {
+  "id": "divergencia_bem",
+  "cat": "fiscal",
+  "label": "Bem/IMEI diverge do aparelho reclamado",
+  "texto": "o bem descrito no documento de aquisição não corresponde ao aparelho identificado pelo IMEI reclamado, o que impede a comprovação da preexistência e da titularidade do bem sinistrado",
+  "conceitos": [
+   "INTERESSE",
+   "INFO_CONTRATACAO"
+  ]
+ },
+ {
+  "id": "bo_narrativa",
+  "cat": "evento",
+  "label": "BO não descreve circunstância concreta",
+  "texto": "o boletim de ocorrência apresentado não descreve circunstância concreta que permita caracterizar, de forma inequívoca, a ocorrência de evento compreendido na cobertura contratada, mostrando-se a narrativa igualmente compatível com hipóteses de risco excluído, nos termos das Condições Gerais",
+  "conceitos": [
+   "REGULACAO",
+   "ONUS_EXCLUSAO"
+  ]
+ },
+ {
+  "id": "furto_simples",
+  "cat": "evento",
+  "label": "Evento tipificado como furto simples (excluído)",
+  "texto": "o registro de ocorrência tipifica o evento como furto simples, sem violência, grave ameaça ou rompimento de obstáculo, hipótese não abrangida pela cobertura contratada, nos termos das Condições Gerais",
+  "conceitos": [
+   "ONUS_EXCLUSAO"
+  ]
+ },
+ {
+  "id": "bo_duplicado",
+  "cat": "evento",
+  "label": "BO duplicado (mesmo bem, vítimas diferentes)",
+  "texto": "o mesmo aparelho, identificado pelo mesmo número de série, foi objeto de registro policial anterior, em nome de terceiro, e voltou a figurar como bem subtraído em novo registro policial, o que impede a caracterização da ocorrência de evento coberto",
+  "conceitos": [
+   "REGULACAO",
+   "COMPETENCIA_REG"
+  ]
+ },
+ {
+  "id": "desaparecimento_bem",
+  "cat": "evento",
+  "label": "Desaparecimento do bem — resolução contratual",
+  "texto": "o contrato protegia aparelho determinado que, conforme comunicado, não está mais em posse do segurado; com o desaparecimento do bem, resolve-se o contrato",
+  "conceitos": [
+   "DESAPARECIMENTO"
+  ]
+ },
+ {
+  "id": "falta_contato",
+  "cat": "comportamento",
+  "label": "Reiteradas tentativas de contato infrutíferas",
+  "texto": "as reiteradas tentativas de contato realizadas para a obtenção de esclarecimentos essenciais à regulação restaram infrutíferas, em prejuízo do dever de prestação de informações",
+  "conceitos": [
+   "INFO_SINISTRO"
+  ]
+ },
+ {
+  "id": "omissao_seguro",
+  "cat": "comportamento",
+  "label": "Omissão de cobertura concorrente (dever de informar)",
+  "texto": "questionado acerca da existência de outras coberturas, o segurado declarou não possuir seguro além do contratado, informação que contraria os elementos objetivos apurados, caracterizando descumprimento do dever de informar",
+  "conceitos": [
+   "INFO_CONTRATACAO",
+   "CUMULATIVO"
+  ]
+ },
+ {
+  "id": "interesse_legitimo",
+  "cat": "interesse",
+  "label": "Bem em nome de terceiro (interesse legítimo)",
+  "texto": "o documento de aquisição do bem encontra-se emitido em nome de terceiro, sem comprovação de transferência de titularidade, não restando demonstrado o interesse legítimo sobre o aparelho",
+  "conceitos": [
+   "INTERESSE"
+  ]
+ },
+ {
+  "id": "recebimento_multiplo",
+  "cat": "indenitario",
+  "label": "Comunicação a mais de uma seguradora",
+  "texto": "os elementos apurados indicam a comunicação do mesmo bem, pelo mesmo evento, a mais de uma seguradora, situação vedada pelo princípio indenitário, que impede o recebimento múltiplo pelo mesmo prejuízo",
+  "conceitos": [
+   "INDENITARIO",
+   "CUMULATIVO"
+  ]
+ },
+ {
+  "id": "ja_indenizado",
+  "cat": "indenitario",
+  "label": "Bem já indenizado por outra seguradora",
+  "texto": "apurou-se a existência de cobertura securitária concorrente para o mesmo bem, com indenização já aprovada e liberada por seguradora congênere, esvaziando o interesse indenizável remanescente perante este contrato",
+  "conceitos": [
+   "INDENITARIO"
+  ]
+ },
+ {
+  "id": "principio_indenitario",
+  "cat": "indenitario",
+  "label": "Ausência de prejuízo indenizável",
+  "texto": "verificou-se a ausência de prejuízo indenizável, em observância ao princípio indenitário, restando prejudicado o pedido",
+  "conceitos": [
+   "INDENITARIO"
+  ]
+ },
+ {
+  "id": "agravamento",
+  "cat": "comportamento",
+  "label": "Agravamento intencional e relevante do risco",
+  "texto": "apurou-se agravamento intencional e relevante do risco objeto do contrato, com nexo causal em relação ao sinistro comunicado",
+  "conceitos": [
+   "AGRAVAMENTO"
+  ]
+ }
+];
+const CATEGORIAS = {
+ "fiscal": {
+  "label": "Documentação fiscal",
+  "cor": "#1e40af",
+  "bg": "#dbeafe"
+ },
+ "evento": {
+  "label": "Caracterização do evento",
+  "cor": "#92400e",
+  "bg": "#fef3c7"
+ },
+ "comportamento": {
+  "label": "Dever de informação",
+  "cor": "#9d174d",
+  "bg": "#fce7f3"
+ },
+ "interesse": {
+  "label": "Interesse legítimo",
+  "cor": "#3730a3",
+  "bg": "#e0e7ff"
+ },
+ "indenitario": {
+  "label": "Princípio indenitário",
+  "cor": "#991b1b",
+  "bg": "#fee2e2"
+ }
+};
+const TRAVAS = [
+ {
+  "id": "T-38",
+  "desc": "Bilhete emitido antes de 11/12/2025 tratado pela Lei 15.040/2024",
+  "acao": "Bloquear"
+ },
+ {
+  "id": "T-40",
+  "desc": "Art. 6.º citado como CAUSA da extinção (é apenas parâmetro restitutório)",
+  "acao": "Bloquear"
+ },
+ {
+  "id": "T-08",
+  "desc": "Imputação de dolo/má-fé com devolução de prêmio no mesmo documento (contradição)",
+  "acao": "Bloquear"
+ },
+ {
+  "id": "T-35",
+  "desc": "Uso de 'cancelamento unilateral' ou 'Bilhete de Proteção' como nome do objeto",
+  "acao": "Bloquear"
+ },
+ {
+  "id": "T-02",
+  "desc": "Recusa descrita de forma genérica (art. 86, §6.º, exige motivação específica)",
+  "acao": "Bloquear"
+ },
+ {
+  "id": "T-16",
+  "desc": "Documento sem canal de contestação",
+  "acao": "Bloquear"
+ },
+ {
+  "id": "T-31",
+  "desc": "Uso do art. 11 (nulidade) sem datas comprovadas",
+  "acao": "Bloquear"
+ },
+ {
+  "id": "T-37",
+  "desc": "Resolução por inadimplemento sem notificação prévia (Súmula 616 STJ)",
+  "acao": "Bloquear"
+ }
+];
+const CLIENTES = [
+ {
+  "n": 1,
+  "nome": "Ana Clara Santana de Araujo",
+  "cpf": "171.617.487-20",
+  "trat": "Sra.",
+  "aparelho": "Apple iPhone 17 Pro 12/256",
+  "imei": "354289634528468",
+  "seg": "kakau",
+  "bilhete": "4400860",
+  "sinistro": "589572",
+  "evento": "Roubo",
+  "dataEvt": "2026-07-01",
+  "dataContrat": "2026-05-02",
+  "premio": "3.329,28",
+  "parceiro": "Ponto Certo",
+  "endereco": "—",
+  "regime": "lei15040",
+  "cartaData": "13 de julho de 2026",
+  "carta": "Concluímos a regulação do sinistro comunicado, referente ao aparelho Apple iPhone 17 PRO 12/256, IMEI 354289634528468, na forma do art. 75 da Lei n.º 15.040/2024. Informamos a não indenização, pelos fundamentos a seguir.\n\nA análise do sinistro foi concluída na forma do art. 75 da Lei n.º 15.040/2024. A não indenização decorre dos fundamentos a seguir:\n\n(a) Documentação financeira apresentada não comprova a efetiva quitação da operação descrita na nota fiscal (valor, destinatário ou modalidade divergentes).\n\nDiante do exposto, o pedido de indenização resta indeferido, com fundamento nos arts. 1.º, 5.º, 75 e 86, § 6.º, da Lei n.º 15.040/2024.\n\nO contrato protegia um aparelho determinado que, conforme comunicado, não está mais em posse do segurado. Com o desaparecimento do bem, o contrato se resolve, na forma do art. 6.º da Lei n.º 15.040/2024, e o tratamento do prêmio será objeto de comunicação própria.",
+  "notif": null
+ },
+ {
+  "n": 2,
+  "nome": "Bianca do Nascimento Querido de Faria",
+  "cpf": "154.542.307-58",
+  "trat": "Sra.",
+  "aparelho": "Apple iPhone 17 Pro 12/256GB",
+  "imei": "356661408359643",
+  "seg": "kakau",
+  "bilhete": "588603",
+  "sinistro": "4493712",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "",
+  "parceiro": "",
+  "endereco": "—",
+  "regime": "lei15040",
+  "cartaData": "03 de julho de 2026",
+  "carta": "Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a impossibilidade de atender ao pedido de indenização, em razão de divergências materiais e objetivas que impedem a validação do evento comunicado e da documentação apresentada, nos termos das Condições Gerais do produto e da Lei n.º 15.040/2024, aplicável ao contrato.\n\nA decisão fundamenta-se nas seguintes constatações, apuradas durante a regulação e a liquidação do sinistro, nos termos do art. 75 da Lei n.º 15.040/2024:\n\n(a) A documentação financeira apresentada não evidencia, de forma objetiva, a efetiva quitação da operação comercial descrita na nota fiscal n.º 9305. Os comprovantes indicam destinatário, valor e modalidade divergentes.\n\n(b) Foi concedida a oportunidade de apresentar documentação complementar, nos termos do art. 86, § 4.º, da Lei n.º 15.040/2024. O prazo transcorreu sem apresentação de documentos aptos a sanar as divergências.\n\n(c) As reiteradas tentativas de contato restaram infrutíferas, em prejuízo do dever de prestação de informações previsto no art. 66 da Lei n.º 15.040/2024.\n\nDiante da impossibilidade de validação material de aquisição e da pré-existência do bem, o pedido de indenização resta indeferido, com fundamento nos arts. 1.º, 5.º, 66, 75 e 86, § 6.º, da Lei n.º 15.040/2024.",
+  "notif": null
+ },
+ {
+  "n": 3,
+  "nome": "Bruno dos Santos de Oliveira",
+  "cpf": "408.834.898-21",
+  "trat": "Sr.",
+  "aparelho": "Apple iPhone 16 Pro Max",
+  "imei": "358245520249946",
+  "seg": "generali",
+  "bilhete": "4571398",
+  "sinistro": "586925",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "1.147,62",
+  "parceiro": "",
+  "endereco": "Rua Mata Atlântica, 13, Jardim Miragaia, São Paulo/SP, CEP 08161-110",
+  "regime": "lei15040",
+  "cartaData": "17 de junho de 2026",
+  "carta": "Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, realizada na forma do art. 75 da Lei n.º 15.040/2024, informamos a impossibilidade de atendimento do pedido de indenização, em razão de divergências materiais e objetivas que impedem a validação da aquisição e da pré-existência do bem protegido.\n\nA decisão fundamenta-se nas seguintes constatações:\n\n(a) ausência de documento fiscal eletrônico autorizado pela Secretaria da Fazenda;\n\n(b) ausência de comprovação financeira da quitação da operação, sem comprovante de pagamento rastreável;\n\n(c) não apresentação de documento de identificação oficial no curso da regulação, em prejuízo do art. 66 da Lei n.º 15.040/2024;\n\n(d) as reiteradas tentativas de contato restaram infrutíferas, em prejuízo do art. 66 da Lei n.º 15.040/2024.\n\nDiante da impossibilidade de validação material da aquisição, da propriedade e da pré-existência do bem, o pedido de indenização resta indeferido, com fundamento na cláusula de Acionamento do Serviço, na cláusula de Situações em que não concedemos atendimento e nos arts. 66, 75 e 86, § 6.º, da Lei n.º 15.040/2024.",
+  "notif": "Após a conclusão da análise técnica do sinistro, verificou-se a impossibilidade de validação material da aquisição, da pré-existência e da propriedade do bem protegido, bem como da caracterização do evento comunicado. Decorrido o prazo sem a documentação solicitada, tais elementos não foram comprovados, o que impede a caracterização do interesse legítimo exigido pelo art. 1.º da Lei n.º 15.040/2024.\n\nComo consequência, o contrato encontra-se resolvido: (a) cessação integral das coberturas a partir do recebimento desta notificação; (b) manutenção da negativa de indenização quanto ao Sinistro n.º 586925; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "proporcional",
+  "notifValor": "1.147,62",
+  "notifData": "17 de junho de 2026"
+ },
+ {
+  "n": 4,
+  "nome": "Dalila Araujo Pessoa",
+  "cpf": "880.343.642-15",
+  "trat": "Sra.",
+  "aparelho": "Samsung Galaxy A16 4G 4/128",
+  "imei": "350792524225875",
+  "seg": "kakau",
+  "bilhete": "4803277",
+  "sinistro": "589299",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "",
+  "parceiro": "",
+  "endereco": "—",
+  "regime": "lei15040",
+  "cartaData": "03 de julho de 2026",
+  "carta": "Referimo-nos ao processo de sinistro acionado para o aparelho em questão. Após a análise criteriosa das informações prestadas, constatamos divergências objetivas entre as circunstâncias narradas no aviso de sinistro e os fatos materiais verificados.\n\nA exatidão das informações sobre as circunstâncias do evento é requisito fundamental para a validação da cobertura. Devido a essas inconsistências, o processo não reúne os elementos fáticos necessários para a aprovação.\n\nComunicamos o indeferimento do pedido de indenização com base no art. 66 e no art. 75 da Lei n.º 15.040/2024, que disciplinam a obrigatoriedade de veracidade e coerência nas declarações.\n\nRestituição: em conformidade com o art. 6.º da Lei n.º 15.040/2024, a apólice será encerrada e a restituição do prêmio será processada sem retenção, de forma integral em relação ao período não utilizado. O estorno será creditado na mesma forma de pagamento original em até 10 (dez) dias úteis.",
+  "notif": null
+ },
+ {
+  "n": 5,
+  "nome": "Divino Justino da Silva Junior",
+  "cpf": "036.687.851-47",
+  "trat": "Sr.",
+  "aparelho": "Apple iPhone 17 Pro Max",
+  "imei": "356973398438315",
+  "seg": "generali",
+  "bilhete": "4718798",
+  "sinistro": "586992",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "",
+  "parceiro": "",
+  "endereco": "Praça Sebastião Silva, Anápolis - Paraíso/GO, CEP 75134-360",
+  "regime": "lei15040",
+  "cartaData": "17 de junho de 2026",
+  "carta": "Após a conclusão da análise técnica, informamos a impossibilidade de atender ao pedido de indenização, na forma do art. 75 da Lei n.º 15.040/2024:\n\na) Natureza do evento. Pela narrativa, o aparelho foi subtraído sem violência, sem grave ameaça e sem rompimento de obstáculo, caracterizando furto simples, risco excluído. As exclusões são de interpretação restritiva e o ônus da prova cabe à seguradora (art. 59), do qual nos desincumbimos pela própria descrição do evento.\n\nb) Cobertura concorrente e princípio indenitário. Apurou-se cobertura concorrente para o mesmo aparelho junto a outra seguradora, com indenização aprovada. Os valores não podem superar o interesse (arts. 89 e 90); nos seguros cumulativos, o dever de comunicar existe (art. 36, § 1.º).\n\nc) Descumprimento do dever de informar. Questionado sobre outras coberturas, declarou não possuir, contrariando os elementos apurados (art. 44, § 1.º, e art. 37).\n\nd) Titularidade. O documento de aquisição está em nome de terceiro (arts. 1.º e 5.º).\n\nO indeferimento fundamenta-se nos arts. 36, § 1.º, 44, § 1.º, 59, 66, 75, 86, § 6.º, 89 e 90 da Lei n.º 15.040/2024.",
+  "notif": "Após a conclusão da análise técnica do sinistro, verificou-se o descumprimento do dever de informar (art. 44, § 1.º) e a violação do art. 37, caracterizados pela negativa de existência de cobertura concorrente, comprometendo pressuposto essencial da relação contratual.\n\nComo consequência, ante a ausência de elemento essencial do contrato (art. 1.º), o contrato encontra-se resolvido: (a) cessação integral das coberturas; (b) manutenção da negativa quanto ao Sinistro n.º 586992; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "sem_premio",
+  "notifValor": "",
+  "notifData": "17 de junho de 2026"
+ },
+ {
+  "n": 6,
+  "nome": "Elias Moreira da Silva",
+  "cpf": "218.901.558-88",
+  "trat": "Sr.",
+  "aparelho": "Samsung Galaxy A16",
+  "imei": "350907320759139",
+  "seg": "generali",
+  "bilhete": "4916309",
+  "sinistro": "591764",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "",
+  "parceiro": "",
+  "endereco": "Estrada Itaquera-Guaianazes, 1492, CEP 08246-001, São Paulo/SP",
+  "regime": "lei15040",
+  "cartaData": "22 de julho de 2026",
+  "carta": "Após a conclusão da análise técnica, informamos a impossibilidade de atender ao pedido de indenização, em razão da constatação de cobertura e indenização concorrentes sobre o mesmo bem e o mesmo evento, situação vedada pelo ordenamento aplicável, na forma do art. 75 da Lei n.º 15.040/2024:\n\n(a) Os elementos apurados indicam a comunicação do mesmo bem, pelo mesmo evento, a mais de uma seguradora, com indenização já liquidada por congênere, situação vedada pelo princípio indenitário.\n\nDiante da caracterização de dupla cobertura indenizatória, o pedido resta indeferido, com fundamento nos arts. 75, 86 e 89 da Lei n.º 15.040/2024.",
+  "notif": "Após a conclusão da análise técnica do sinistro, apurou-se a existência de cobertura e indenização concorrentes sobre o mesmo bem e o mesmo evento, já liquidadas por seguradora congênere, situação que, à luz do princípio indenitário, esvazia o interesse indenizável remanescente perante este contrato.\n\nComo consequência, o contrato encontra-se resolvido: (a) cessação integral das coberturas; (b) manutenção da negativa quanto ao Sinistro n.º 591764; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "sem_premio",
+  "notifValor": "",
+  "notifData": "22 de julho de 2026"
+ },
+ {
+  "n": 7,
+  "nome": "Fredson Vieira Santos",
+  "cpf": "001.839.055-20",
+  "trat": "Sr.",
+  "aparelho": "Samsung Galaxy M15 Azul",
+  "imei": "351214941098032",
+  "seg": "gazin",
+  "bilhete": "588069",
+  "sinistro": "3941820",
+  "evento": "Roubo",
+  "dataEvt": "2026-06-12",
+  "dataContrat": "2025-07-31",
+  "premio": "150,00",
+  "parceiro": "Amazon",
+  "endereco": "Rua Águas Claras 1776, SN, Teixeira de Freitas-BA, CEP 45990-009",
+  "regime": "lei15040",
+  "cartaData": "06 de julho de 2026",
+  "carta": "Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a impossibilidade de atender ao pedido de indenização, na forma do art. 75 da Lei n.º 15.040/2024:\n\n(a) o documento fiscal contém inconsistências cadastrais e operacionais objetivas, verificadas em registros públicos;\n\n(b) o pagamento declarado, em espécie, não veio acompanhado de comprovante de quitação rastreável;\n\n(c) o boletim de ocorrência não descreve circunstância concreta que caracterize evento coberto, sendo compatível com risco excluído;\n\n(d) as reiteradas tentativas de contato restaram infrutíferas (art. 66).\n\nDiante da impossibilidade de validação material da aquisição e da pré-existência do bem, o pedido resta indeferido, com fundamento nos arts. 66, 75 e 86, § 6.º, da Lei n.º 15.040/2024.",
+  "notif": "Após a conclusão da análise técnica do sinistro, verificou-se a impossibilidade de validação material da aquisição e da pré-existência do bem protegido, bem como da caracterização do evento comunicado.\n\nComo consequência, ante a ausência de comprovação do interesse legítimo (art. 1.º), o contrato encontra-se resolvido: (a) cessação integral das coberturas; (b) manutenção da negativa quanto ao Sinistro n.º 588069; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "sem_premio",
+  "notifValor": "",
+  "notifData": "06 de julho de 2026"
+ },
+ {
+  "n": 8,
+  "nome": "Gustavo da Silva Raxel de Magalhães",
+  "cpf": "219.030.827-57",
+  "trat": "Sr.",
+  "aparelho": "Apple iPhone 14 5G 6/128",
+  "imei": "356165444996947",
+  "seg": "kakau",
+  "bilhete": "4420385",
+  "sinistro": "588069",
+  "evento": "Roubo",
+  "dataEvt": "2026-05-11",
+  "dataContrat": "2025-12-20",
+  "premio": "1.320,00",
+  "parceiro": "Sete Lan",
+  "endereco": "Rua Capitão Vieira, 429, Rio de Janeiro/RJ, CEP 21540-330",
+  "regime": "lei15040",
+  "cartaData": "03 de julho de 2026",
+  "carta": "Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a impossibilidade de atender ao pedido de indenização, na forma do art. 75 da Lei n.º 15.040/2024:\n\n(a) o documento fiscal contém inconsistências cadastrais e operacionais objetivas, verificadas em registros públicos;\n\n(b) o pagamento declarado, em espécie, não veio acompanhado de comprovante de quitação rastreável;\n\n(c) o boletim de ocorrência não descreve circunstância concreta que caracterize evento coberto;\n\n(d) as reiteradas tentativas de contato restaram infrutíferas (art. 66).\n\nDiante da impossibilidade de validação material da aquisição e da pré-existência do bem, o pedido resta indeferido, com fundamento nos arts. 66, 75 e 86, § 6.º, da Lei n.º 15.040/2024.",
+  "notif": "Após a conclusão da análise técnica do sinistro, verificou-se a impossibilidade de validação material da aquisição e da pré-existência do bem protegido, bem como da caracterização do evento comunicado.\n\nComo consequência, ante a ausência de comprovação do interesse legítimo (art. 1.º), o contrato encontra-se resolvido: (a) cessação integral das coberturas; (b) manutenção da negativa quanto ao Sinistro n.º 588069; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "sem_premio",
+  "notifValor": "",
+  "notifData": "07 de julho de 2026"
+ },
+ {
+  "n": 9,
+  "nome": "Jardel Alaff Silva Alexandre",
+  "cpf": "061.552.503-24",
+  "trat": "Sr.",
+  "aparelho": "Samsung Galaxy S24 Ultra",
+  "imei": "352364850363155",
+  "seg": "generali",
+  "bilhete": "4733461",
+  "sinistro": "586993",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "",
+  "parceiro": "",
+  "endereco": "Distrito Ipaguacu mirim, 25, Massapê/CE, CEP 62140-000",
+  "regime": "lei15040",
+  "cartaData": "17 de junho de 2026",
+  "carta": "Após a conclusão da análise técnica, informamos a impossibilidade de atender ao pedido de indenização, na forma da Lei n.º 15.040/2024:\n\na) Restrição preexistente à contratação. O aparelho registrava bloqueio por perda ou roubo em data anterior ao início de vigência. As CG excluem ocorrências preexistentes e o art. 5.º exige risco futuro e incerto.\n\nb) Cobertura concorrente e princípio indenitário. Apurou-se cobertura concorrente com indenização já aprovada (arts. 89, 90 e 36, § 1.º).\n\nc) Descumprimento doloso do dever de informar. Questionado, negou possuir outro seguro (art. 44, § 1.º, e art. 37).\n\nDiante das irregularidades, o pedido resta indeferido, com fundamento nos arts. 35, 66, 75 e 86, § 6.º, da Lei n.º 15.040/2024.",
+  "notif": "A resolução do contrato funda-se no descumprimento doloso do dever de informar (art. 44, § 1.º) e na violação do dever de lealdade e boa-fé (art. 37), caracterizados pela negativa de existência de cobertura concorrente quando questionado de forma direta. A consequência legal é a perda da garantia, sem prejuízo da dívida de prêmio relativa ao período decorrido.",
+  "notifRestituicao": "proporcional",
+  "notifValor": "",
+  "notifData": "17 de junho de 2026",
+  "vigenciaFim": "08/04/2027"
+ },
+ {
+  "n": 10,
+  "nome": "Maria Izanete Costa",
+  "cpf": "886.570.433-00",
+  "trat": "Sra.",
+  "aparelho": "Apple iPhone 17 Pro Max 256 GB",
+  "imei": "359814715550795",
+  "seg": "kakau",
+  "bilhete": "4802698",
+  "sinistro": "586848",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "",
+  "parceiro": "",
+  "endereco": "Avenida 9 de Julho, n.º 544, Bela Vista, São Paulo/SP, CEP 01312-000",
+  "regime": "lei15040",
+  "cartaData": "17 de junho de 2026",
+  "carta": "Após a conclusão da análise técnica, informamos a impossibilidade de atender ao pedido de indenização, na forma do art. 75 da Lei n.º 15.040/2024:\n\na) Ausência de comprovação do evento coberto. O mesmo aparelho foi objeto de registro policial anterior, em nome de terceiro, e de comunicação de sinistro a outra seguradora, voltando a figurar como subtraído em novo registro. A coexistência de dois registros sobre o mesmo aparelho impede a caracterização do evento.\n\nb) Interesse legítimo. O documento de aquisição está em nome de terceiro (arts. 1.º e 5.º).\n\nc) Vedação ao recebimento múltiplo. Comunicação do bem a mais de uma seguradora (arts. 89 e 90).\n\nDiante da ausência de comprovação do evento coberto e da vedação ao recebimento múltiplo, o pedido resta indeferido, com fundamento nos arts. 75, 76, 89 e 90 da Lei n.º 15.040/2024.",
+  "notif": "Após a conclusão da análise técnica do sinistro, verificou-se a impossibilidade de validação material da aquisição e da pré-existência do bem protegido, bem como da caracterização do evento comunicado.\n\nComo consequência, ante a ausência de comprovação do interesse legítimo (art. 1.º), o contrato encontra-se resolvido: (a) cessação integral das coberturas; (b) manutenção da negativa quanto ao Sinistro n.º 586848; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "sem_premio",
+  "notifValor": "",
+  "notifData": "17 de junho de 2026"
+ },
+ {
+  "n": 11,
+  "nome": "Mashal Khan",
+  "cpf": "062.488.977-78",
+  "trat": "Sra.",
+  "aparelho": "Apple iPhone 17 Pro Max 12/512",
+  "imei": "357610218272420",
+  "seg": "kakau",
+  "bilhete": "4905473",
+  "sinistro": "589275",
+  "evento": "Roubo",
+  "dataEvt": "2026-06-27",
+  "dataContrat": "2026-06-09",
+  "premio": "3.144,24",
+  "parceiro": "Ponto Certo",
+  "endereco": "Rua Rio Preto, 211 - Rio de Janeiro/RJ, CEP 21211-100",
+  "regime": "lei15040",
+  "cartaData": "03 de julho de 2026",
+  "carta": "Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a impossibilidade de atender ao pedido de indenização, na forma do art. 75 da Lei n.º 15.040/2024:\n\n(a) o documento fiscal contém inconsistências cadastrais e operacionais objetivas, verificadas em registros públicos;\n\n(b) o pagamento declarado, em espécie, não veio acompanhado de comprovante de quitação rastreável;\n\n(c) o boletim de ocorrência não descreve circunstância concreta que caracterize evento coberto;\n\n(d) as reiteradas tentativas de contato restaram infrutíferas (art. 66).\n\nDiante da impossibilidade de validação material da aquisição e da pré-existência do bem, o pedido resta indeferido, com fundamento nos arts. 66, 75 e 86, § 6.º, da Lei n.º 15.040/2024.",
+  "notif": "Após a conclusão da análise técnica do sinistro, verificou-se a impossibilidade de validação material da aquisição e da pré-existência do bem protegido, bem como da caracterização do evento comunicado.\n\nComo consequência, ante a ausência de comprovação do interesse legítimo (art. 1.º), o contrato encontra-se resolvido: (a) cessação integral das coberturas; (b) manutenção da negativa quanto ao Sinistro n.º 589275; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "sem_premio",
+  "notifValor": "",
+  "notifData": "03 de julho de 2026"
+ },
+ {
+  "n": 12,
+  "nome": "Paulo Ricardo Rodrigues Fonseca",
+  "cpf": "445.793.508-55",
+  "trat": "Sr.",
+  "aparelho": "Apple iPhone 17 Pro",
+  "imei": "355832510775171",
+  "seg": "generali",
+  "bilhete": "4822517",
+  "sinistro": "588808",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "",
+  "parceiro": "",
+  "endereco": "Rua Benedito de Barros, 42, São Paulo/SP, CEP 05882-370",
+  "regime": "lei15040",
+  "cartaData": "16 de junho de 2026",
+  "carta": "Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a impossibilidade de atender ao pedido de indenização, na forma do art. 75 da Lei n.º 15.040/2024:\n\n(a) o documento fiscal contém inconsistências cadastrais e operacionais objetivas, verificadas em registros públicos;\n\n(b) o pagamento declarado, em espécie, não veio acompanhado de comprovante de quitação rastreável;\n\n(c) o boletim de ocorrência não descreve circunstância concreta que caracterize evento coberto;\n\n(d) as reiteradas tentativas de contato restaram infrutíferas (art. 66).\n\nDiante da impossibilidade de validação material da aquisição e da pré-existência do bem, o pedido resta indeferido, com fundamento nos arts. 66, 75 e 86, § 6.º, da Lei n.º 15.040/2024.",
+  "notif": "Após a conclusão da análise técnica do sinistro, verificou-se a impossibilidade de validação material da aquisição e da pré-existência do bem protegido, bem como da caracterização do evento comunicado.\n\nComo consequência, ante a ausência de comprovação do interesse legítimo (art. 1.º), o contrato encontra-se resolvido: (a) cessação integral das coberturas; (b) manutenção da negativa quanto ao Sinistro n.º 588808; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "sem_premio",
+  "notifValor": "",
+  "notifData": "12 de junho de 2026"
+ },
+ {
+  "n": 13,
+  "nome": "Rosangela Rodrigues Ferreira",
+  "cpf": "358.758.208-45",
+  "trat": "Sra.",
+  "aparelho": "Apple iPhone 13",
+  "imei": "356417991004116",
+  "seg": "generali",
+  "bilhete": "4518876",
+  "sinistro": "589958",
+  "evento": "Roubo",
+  "dataEvt": "2026-05-28",
+  "dataContrat": "2026-01-23",
+  "premio": "696,00",
+  "parceiro": "Pagbank",
+  "endereco": "Rua Eduardo Panadez, 182, Jardim Seckler, São Paulo/SP, CEP 04242-130",
+  "regime": "lei15040",
+  "cartaData": "23 de julho de 2026",
+  "carta": "Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a impossibilidade de atender ao pedido de indenização, nos termos da Lei n.º 15.040/2024.\n\nA análise foi concluída na forma do art. 75 da Lei n.º 15.040/2024. A não indenização decorre dos fundamentos a seguir:\n\n(a) Ausência de prejuízo indenizável, princípio indenitário (arts. 89, 90 e 81).\n\nDiante do exposto, o pedido resta indeferido, com fundamento nos arts. 1.º, 5.º, 75 e 86, § 6.º, da Lei n.º 15.040/2024.\n\nO contrato protegia um aparelho determinado que não está mais em posse do segurado. Com o desaparecimento do bem, o contrato se resolve, na forma do art. 6.º da Lei n.º 15.040/2024.",
+  "notif": "A análise concluiu pela ausência de prejuízo indenizável, uma vez que o interesse não subsiste nos termos exigidos para a liquidação, restando prejudicado o pedido.\n\nComo consequência, ante a ausência de comprovação do interesse legítimo (art. 1.º), o contrato encontra-se resolvido: (a) cessação integral das coberturas; (b) manutenção da negativa de indenização; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "proporcional",
+  "notifValor": "",
+  "notifData": "23 de julho de 2026"
+ },
+ {
+  "n": 14,
+  "nome": "Sabrina Varela da Silva Fonte",
+  "cpf": "169.094.337-85",
+  "trat": "Sra.",
+  "aparelho": "Apple iPhone 17 Pro Max 12/256",
+  "imei": "358902518376558",
+  "seg": "kakau",
+  "bilhete": "588308",
+  "sinistro": "4756653",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "",
+  "parceiro": "",
+  "endereco": "Rua Maria Soares Sendas, 222, Venda Velha, São João de Meriti/RJ, CEP 25581-325",
+  "regime": "lei15040",
+  "cartaData": "30 de junho de 2026",
+  "carta": "Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a impossibilidade de atender ao pedido de indenização, na forma do art. 75 da Lei n.º 15.040/2024:\n\n(a) o documento fiscal contém inconsistências cadastrais e operacionais objetivas, verificadas em registros públicos;\n\n(b) o pagamento declarado, em espécie, não veio acompanhado de comprovante de quitação rastreável;\n\n(c) o boletim de ocorrência não descreve circunstância concreta que caracterize evento coberto;\n\n(d) as reiteradas tentativas de contato restaram infrutíferas (art. 66).\n\nDiante da impossibilidade de validação material da aquisição e da pré-existência do bem, o pedido resta indeferido, com fundamento nos arts. 66, 75 e 86, § 6.º, da Lei n.º 15.040/2024.",
+  "notif": "Após a conclusão da análise técnica do sinistro, verificou-se a impossibilidade de validação material da aquisição e da pré-existência do bem protegido, bem como da caracterização do evento comunicado.\n\nComo consequência, ante a ausência de comprovação do interesse legítimo (art. 1.º), o contrato encontra-se resolvido: (a) cessação integral das coberturas; (b) manutenção da negativa quanto ao Sinistro n.º 588308; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "sem_premio",
+  "notifValor": "",
+  "notifData": "30 de junho de 2026"
+ },
+ {
+  "n": 15,
+  "nome": "Wagner Mendes da Silva",
+  "cpf": "079.358.917-70",
+  "trat": "Sr.",
+  "aparelho": "Apple iPhone 17 Pro Max 256 GB",
+  "imei": "355224250630420",
+  "seg": "kakau",
+  "bilhete": "4749932",
+  "sinistro": "585766",
+  "evento": "Roubo",
+  "dataEvt": "",
+  "dataContrat": "",
+  "premio": "3.238,08",
+  "parceiro": "",
+  "endereco": "Rua Fernando Alberto de Oliveira, CEP 23810-510",
+  "regime": "lei15040",
+  "cartaData": "17 de junho de 2026",
+  "carta": "Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a impossibilidade de atender ao pedido de indenização, na forma do art. 75 da Lei n.º 15.040/2024. A decisão apoia-se nos fundamentos a seguir, autônomos entre si:\n\n(a) Divergência entre o bem e o aparelho reclamado. O bem descrito no documento de aquisição não corresponde ao aparelho identificado pelo IMEI reclamado, o que impede a comprovação da preexistência e da titularidade (arts. 1.º e 5.º).\n\n(b) Incompatibilidade do evento, pela narrativa em processo de regulação e os fatos declarados em boletim de ocorrência, em violação ao dever de informação (art. 66).\n\nDiante da impossibilidade de comprovação da pré-existência e da titularidade do bem, o pedido resta indeferido, com fundamento nos arts. 59, 75 e 86, § 6.º, da Lei n.º 15.040/2024.",
+  "notif": "Com o desaparecimento do bem segurado, extingue-se o interesse legítimo que dá suporte ao contrato, hipótese que resolve o contrato, nos termos do art. 6.º da Lei n.º 15.040/2024. A resolução por esta causa é independente da análise de cobertura do sinistro e não constitui reconhecimento de obrigação de indenizar.\n\nComo consequência, o contrato encontra-se resolvido: (a) cessação das coberturas a partir do recebimento desta notificação; (b) manutenção da negativa quanto ao Sinistro n.º 585766; (c) extinção das obrigações recíprocas futuras.",
+  "notifRestituicao": "integral",
+  "notifValor": "3.238,08",
+  "notifData": "17 de junho de 2026"
+ }
+];
+</script>
+<script>
+// ==================== HELPERS ====================
+function v(id){const el=document.getElementById(id);return el?el.value:'';}
+function byName(n){const el=document.querySelector('input[name='+n+']:checked');return el?el.value:'';}
+const MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+function fmtDate(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return d+' de '+MESES[+m-1]+' de '+y;}
+function parseMoney(s){if(!s)return 0;return parseFloat(String(s).replace(/\./g,'').replace(',','.').replace(/[^\d.]/g,''))||0;}
+function fmtMoney(n){return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/864e5);}
+function curRegime(){return v('regime')||'lei15040';}
+function citar(conceito){const r=REGIMES[curRegime()];return (r&&r.citacoes[conceito])||conceito;}
+// bloco de base legal por tópico
+function bl(txt){return '<div class="baselegal"><b>Base legal:</b> '+txt+'</div>';}
+
+// ==================== REGIME AUTOMÁTICO ====================
+function autoRegime(){
+  const em=v('dataEmissao');if(!em)return;
+  const corte=new Date('2025-12-11');
+  const sel=document.getElementById('regime');
+  sel.value = (new Date(em) < corte) ? 'anterior' : 'lei15040';
+  updateRegimeHint();
+}
+function updateRegimeHint(){
+  const r=REGIMES[curRegime()];
+  document.getElementById('regimeHint').innerHTML='<span class="regime-pill '+(curRegime()==='lei15040'?'regime-lei':'regime-ant')+'">'+r.curto+'</span>';
+}
+
+// ==================== INIT HIPÓTESES ====================
+function truncate(s,n){return s.length>n?s.slice(0,n)+'…':s;}
+function initHipoteses(){
+  const c=document.getElementById('hipoteses-container');c.innerHTML='';
+  Object.keys(CATEGORIAS).forEach(cat=>{
+    const ci=CATEGORIAS[cat];
+    const h=document.createElement('div');h.className='mt-3 first:mt-0 mb-1';
+    h.innerHTML='<span class="badge" style="background:'+ci.bg+';color:'+ci.cor+'">'+ci.label+'</span>';
+    c.appendChild(h);
+    HIPOTESES.filter(x=>x.cat===cat).forEach(x=>{
+      const row=document.createElement('label');row.className='checkbox-row';
+      row.innerHTML='<input type="checkbox" data-h="'+x.id+'" onchange="onHip(this)"><div class="flex-1"><div class="text-sm font-semibold text-slate-800">'+x.label+'</div><div class="text-xs text-slate-500 mt-0.5">'+truncate(x.texto,120)+'</div></div>';
+      c.appendChild(row);
+    });
+  });
+}
+function onHip(cb){cb.closest('.checkbox-row').classList.toggle('active',cb.checked);render();}
+function selectedHip(){return Array.from(document.querySelectorAll('input[data-h]:checked')).map(cb=>HIPOTESES.find(h=>h.id===cb.dataset.h));}
+
+// ==================== COLETA ====================
+function getData(){
+  const seg=SEGURADORAS[v('seguradora')]||SEGURADORAS.kakau;
+  return{
+    regime:curRegime(),
+    sinistro:v('sinistro')||'________', bilhete:v('bilhete')||'________',
+    dataCarta:fmtDate(v('dataCarta'))||'____ de __________ de 2026',
+    cidade:v('cidade')||'São Paulo',
+    nome:(v('nome')||'NOME DO TITULAR').trim(), cpf:v('cpf')||'___.___.___-__',
+    trat:v('tratamento'), endereco:v('endereco')||'[endereço completo]',
+    aparelho:v('aparelho')||'[descrição do aparelho]', imei:v('imei')||'___________',
+    evento:v('evento'), dataEvt:v('dataEvt'),
+    seg:seg, segNome:seg.nome,
+    hip:selectedHip(), custom:v('hipoteseCustom').trim(),
+    restituicao:byName('restituicao'),
+    premio:v('premio'), vigIni:v('vigIni'), vigFim:v('vigFim'), dataCartaISO:v('dataCarta')
+  };
+}
+
+// ==================== CITAÇÃO AGREGADA (indeferimento) ====================
+function citacaoIndeferimento(d){
+  const concs=new Set(['REGULACAO']);
+  d.hip.forEach(h=>h.conceitos.forEach(c=>concs.add(c)));
+  concs.add('MOTIVACAO');
+  const arr=Array.from(concs).map(c=>citar(c));
+  // dedup por string
+  const uniq=[...new Set(arr)];
+  if(uniq.length===1)return uniq[0];
+  const last=uniq.pop();
+  return uniq.join('; ')+'; e '+last;
+}
+
+// ==================== RENDER: CARTA ====================
+function renderCarta(){
+  const d=getData();
+  const pron=d.trat==='Sr.'?'Prezado':'Prezada';
+  const suj=d.trat==='Sr.'?'Ao Sr.':'À Sr.ª';
+  const titmant=d.trat==='Sr.'?'O Titular mantém':'A Titular mantém';
+
+  let lista='';
+  if(d.hip.length||d.custom){
+    const letras=['a','b','c','d','e','f','g','h','i','j'];
+    const items=[];
+    d.hip.forEach((h,i)=>{
+      const bases=[...new Set(h.conceitos.map(c=>citar(c)))].join('; ');
+      items.push('<p class="clause"><strong>('+letras[i]+')</strong> '+h.texto+';</p>'+bl(bases));
+    });
+    if(d.custom){items.push('<p class="clause"><strong>('+letras[items.length]+')</strong> '+d.custom+';</p>');}
+    // ajusta pontuação final da última cláusula textual
+    lista=items.join('');
+    lista=lista.replace(/;<\/p>(<div class="baselegal">[^]*?<\/div>)?$/, m=>m.replace(';</p>','.</p>'));
+  }else{
+    lista='<p class="clause"><em>[Selecione ao menos uma hipótese de recusa no formulário]</em></p>';
+  }
+
+  const normaTxt = d.regime==='lei15040' ? 'da Lei n.º 15.040/2024' : 'do Código Civil e da Circular SUSEP n.º 621/2021';
+
+  return letterhead(d)+`
+<p class="doc-title">Carta de Resposta à Regulação de Sinistro</p>
+<p class="doc-sub">Sinistro n.º ${d.sinistro} · Bilhete n.º ${d.bilhete} · Regime: ${REGIMES[d.regime].curto}</p>
+
+<div class="doc-head">
+  <p>${d.cidade}, ${d.dataCarta}.</p>
+  <p style="margin-top:8pt">${suj} <strong>${d.nome}</strong></p>
+  <p>CPF n.º ${d.cpf}</p>
+  <p>Aparelho: ${d.aparelho} · IMEI n.º ${d.imei}</p>
+</div>
+
+<p class="clause" style="margin-top:12pt">${pron} Titular,</p>
+
+<p class="clause">Após a conclusão da análise técnica da comunicação de sinistro e da documentação apresentada, informamos a <strong>impossibilidade de atender ao pedido de indenização</strong>, em razão de divergências materiais e objetivas que impedem a validação do evento comunicado e da documentação apresentada, nos termos das Condições Gerais do produto e ${normaTxt}, aplicável ao contrato.</p>
+
+<p class="clause">A decisão fundamenta-se nas seguintes constatações, apuradas durante a regulação e a liquidação do sinistro, na forma ${citar('REGULACAO')}:</p>
+${bl(citar('REGULACAO')+' — procedimento de regulação e liquidação.')}
+
+${lista}
+
+<p class="clause">Diante da impossibilidade de validação material da aquisição e da pré-existência do bem, bem como da caracterização do evento coberto, o pedido de indenização resta <strong>indeferido</strong>, com fundamento em ${citacaoIndeferimento(d)}.</p>
+${bl('Fundamentos agregados do indeferimento: '+citacaoIndeferimento(d)+'.')}
+
+<p class="clause">Esta decisão poderá ser objeto de reanálise mediante a apresentação de novos elementos, documentos e esclarecimentos adicionais sobre os fatos.</p>
+${bl('Recusa expressa e motivada; vedada a inovação posterior do fundamento — '+citar('MOTIVACAO')+'.')}
+
+<p class="clause">O relatório de regulação e os documentos técnicos não sigilosos que fundamentam esta decisão encontram-se à disposição mediante solicitação formal, ressalvados os elementos protegidos por sigilo legal e os dados de terceiros.</p>
+${bl(citar('DOC_ACESSO')+' — acesso ao relatório e aos documentos da decisão.')}
+
+<p class="clause">O tratamento da devolução de valores será objeto de notificação própria. ${titmant} o direito de contestar esta decisão pelos canais de atendimento ou pelos órgãos competentes.</p>
+
+<p class="sig">Atenciosamente,</p>
+<p><strong>Departamento de Regulação — Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda.</strong></p>
+${footer()}`;
+}
+
+// ==================== RENDER: NOTIFICAÇÃO ====================
+function renderNotificacao(){
+  const d=getData();
+  const inscr=d.trat==='Sr.'?'inscrito':'inscrita';
+  const titmant=d.trat==='Sr.'?'O Titular mantém':'A Titular mantém';
+  const daTit=d.trat==='Sr.'?'do Titular':'da Titular';
+  const peloTit=d.trat==='Sr.'?'pelo Titular':'pela Titular';
+
+  const rc=calcRestituicao(d);
+  let restTxt='';
+  if(d.restituicao==='sem_premio'){
+    restTxt='Em atenção ao parâmetro restitutório do '+citar('RESTITUICAO')+', não há valor de prêmio a ser restituído, considerando que a vigência contratual se encontra em seu período final, inexistindo período de risco não decorrido apto a ensejar restituição proporcional.';
+  }else if(d.restituicao==='proporcional'){
+    restTxt='Em atenção ao parâmetro restitutório do '+citar('RESTITUICAO')+', será realizada a restituição proporcional do prêmio referente ao período de risco não decorrido'+(rc.valor?', no valor apurado de R$ '+fmtMoney(rc.valor):'')+', contado do recebimento desta notificação até o termo final da vigência originalmente contratada.';
+  }else if(d.restituicao==='integral'){
+    restTxt='Em atenção ao parâmetro restitutório do '+citar('RESTITUICAO')+', é devida a restituição do prêmio relativo ao período não decorrido. Por liberalidade da fornecedora, em condição mais favorável ao titular, a restituição será integral'+(rc.premio?', no valor de R$ '+fmtMoney(rc.premio):'')+', independentemente da dedução proporcional facultada por lei.';
+  }else{
+    restTxt='Considerando a imputação de conduta dolosa/má-fé, o prêmio é mantido como dívida e a devolução fica vedada, nos termos do '+citar('FRAUDE')+' e do art. 7.º da Lei n.º 15.040/2024. Não há restituição a processar.';
+  }
+
+  const efeitos='(a) cessação integral das coberturas a partir do recebimento desta notificação; (b) manutenção da negativa de indenização quanto ao Sinistro n.º '+d.sinistro+', nos termos da carta de resposta à regulação; (c) extinção das obrigações recíprocas futuras.';
+
+  return letterhead(d)+`
+<p class="doc-title">Notificação de Resolução do Contrato de Proteção</p>
+<p class="doc-sub">Bilhete n.º ${d.bilhete} · Sinistro n.º ${d.sinistro} · Regime: ${REGIMES[d.regime].curto}</p>
+
+<p class="clause"><strong>1. IDENTIFICAÇÃO DAS PARTES</strong></p>
+<p class="clause"><strong>Representante:</strong> Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda., inscrita no CNPJ/MF sob o n.º 13.403.189/0001-05, na qualidade de representante da <strong>${d.segNome}</strong>, CNPJ n.º ${d.seg.cnpj}, Processo SUSEP n.º ${d.seg.susep}.</p>
+<p class="clause"><strong>Titular:</strong> ${d.nome}, ${inscr} no CPF/MF sob o n.º ${d.cpf}, residente na ${d.endereco}.</p>
+
+<p class="clause"><strong>2. OBJETO DA NOTIFICAÇÃO</strong></p>
+<p class="clause">Esta notificação formaliza a resolução do Contrato de Proteção formalizado pelo Bilhete n.º ${d.bilhete}, referente ao aparelho ${d.aparelho}, IMEI n.º ${d.imei}, vinculado à proteção contratada por intermédio do parceiro.</p>
+${bl('Objeto do contrato — garantia de interesse legítimo: '+citar('OBJETO')+'. Nomenclatura "Notificação de Resolução" exigida pela vedação à extinção unilateral (art. 9.º, §5.º; trava T-35).')}
+
+<p class="clause"><strong>3. FUNDAMENTAÇÃO E EFEITOS</strong></p>
+<p class="clause">Após a conclusão da análise técnica do sinistro, comunicada por carta de resposta própria, verificou-se a impossibilidade de validação material da aquisição e da pré-existência do bem protegido, bem como da caracterização do evento comunicado, comprometendo pressuposto essencial da relação contratual de proteção.</p>
+<p class="clause">Como consequência, ante a ausência de comprovação do interesse legítimo sobre o bem protegido, elemento essencial do contrato de seguro (${citar('OBJETO')}), o contrato encontra-se <strong>resolvido</strong>, produzindo os seguintes efeitos: ${efeitos}</p>
+${bl('Causa da resolução: '+citar('INTERESSE')+'. O art. 6.º NÃO é a causa da extinção, apenas o parâmetro restitutório (trava T-40).')}
+
+<p class="clause"><strong>4. CUMPRIMENTO LEGAL — RESTITUIÇÃO</strong></p>
+<p class="clause">${restTxt} A Taxa de Utilização/Franquia, se efetivamente paga, será estornada integralmente. O estorno será realizado, preferencialmente, pela mesma forma de pagamento originalmente utilizada, inclusive por crédito no cartão, quando aplicável. Na impossibilidade de processamento pela forma original, a restituição será realizada por transferência bancária ou PIX para conta de titularidade exclusiva ${daTit}. Nessa hipótese, o pagamento será processado em até 10 (dez) dias úteis, contados do recebimento correto dos dados bancários, que deverão ser encaminhados ${peloTit} no prazo de 30 (trinta) dias corridos, contados do recebimento desta notificação. A devolução constitui obrigação decorrente da resolução e não representa acordo, transação, novação ou reconhecimento da regularidade do pedido, tampouco renúncia aos direitos da seguradora previstos em lei. ${titmant} o direito de contestar a decisão pelos canais de atendimento ou pelos órgãos competentes. A ausência de envio dos dados bancários não obsta ao encerramento do contrato, apenas sobrestará o repasse financeiro.</p>
+${bl('Parâmetro restitutório: '+citar('RESTITUICAO')+'.')}
+
+<p class="sig">${d.cidade}, ${d.dataCarta}.</p>
+<p class="sig">Atenciosamente,</p>
+<p><strong>Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda. — Departamento de Regulação</strong></p>
+${footer()}`;
+}
+
+// ==================== LETTERHEAD / FOOTER (documento) ====================
+function letterhead(d){
+  return `<div class="letterhead">
+    <svg width="96" height="34" viewBox="0 0 172 60" xmlns="http://www.w3.org/2000/svg" aria-label="Pitzi">
+      <g fill="#00b28f">
+        <path d="M6 12h13c9 0 15 5 15 13s-6 13-15 13h-6v8H6V12zm7 8v10h5c4 0 6-2 6-5s-2-5-6-5h-5z"/>
+        <rect x="40" y="12" width="7" height="34"/>
+        <path d="M56 20h5v-8h7v8h7v7h-7v9c0 2 1 3 3 3h4v7h-6c-6 0-8-3-8-8V27h-5v-7z"/>
+        <path d="M84 20h26v6L94 39h16v7H83v-6l16-13H84z"/>
+        <rect x="116" y="20" width="7" height="26"/>
+      </g><circle cx="119.5" cy="14" r="4" fill="#0a1128"/>
+    </svg>
+    <div class="lh-meta">Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda.<br>CNPJ 13.403.189/0001-05 · Departamento de Regulação<br>Representante de ${d.segNome}</div>
+  </div>`;
+}
+function footer(){
+  return `<div class="footer-doc">Documento gerado pelo Motor de Regulação Pitzi · Fundamento: ${REGIMES[curRegime()].curto} · Peça sujeita à revisão do Departamento Jurídico.</div>`;
+}
+
+// ==================== CÁLCULO DE RESTITUIÇÃO ====================
+function calcRestituicao(d){
+  const premio=parseMoney(d.premio);
+  const res={premio:premio,valor:0,html:''};
+  if(!premio||!d.vigIni||!d.vigFim||!d.dataCartaISO){
+    res.html='<div class="text-xs text-slate-400">Preencha prêmio, vigência e data da carta para o cálculo proporcional.</div>';
+    return res;
+  }
+  const tot=daysBetween(d.vigIni,d.vigFim);
+  const decor=Math.max(0,Math.min(daysBetween(d.vigIni,d.dataCartaISO),tot));
+  const restar=Math.max(0,tot-decor);
+  const propor= tot>0 ? premio*(restar/tot) : 0;
+  res.valor = (d.restituicao==='integral') ? premio : (d.restituicao==='proporcional' ? propor : 0);
+  const linhas=[
+    ['Prêmio total','R$ '+fmtMoney(premio)],
+    ['Dias de vigência total',String(tot)],
+    ['Dias decorridos',String(decor)],
+    ['Dias a decorrer',String(restar)],
+    ['Restituição proporcional','R$ '+fmtMoney(propor)],
+  ];
+  let modoTxt = d.restituicao==='integral'?'Integral (liberalidade): R$ '+fmtMoney(premio)
+             : d.restituicao==='proporcional'?'Proporcional: R$ '+fmtMoney(propor)
+             : d.restituicao==='retencao'?'Retenção — sem devolução (dolo/má-fé)'
+             : 'Sem prêmio a restituir';
+  res.html='<div class="border border-slate-200 rounded-lg p-3 bg-slate-50">'
+    +linhas.map(l=>'<div class="calc-line"><span>'+l[0]+'</span><b>'+l[1]+'</b></div>').join('')
+    +'<div class="calc-line" style="border-bottom:none;margin-top:4px"><span class="font-semibold text-[var(--accent-dark)]">Valor aplicado</span><b class="text-[var(--accent-dark)]">'+modoTxt+'</b></div></div>';
+  return res;
+}
+
+// ==================== TRAVAS ====================
+function checkTravas(d){
+  const alerts=[];
+  // T-38: bilhete anterior ao corte tratado pela lei nova
+  if(d.regime==='lei15040' && v('dataEmissao') && new Date(v('dataEmissao'))<new Date('2025-12-11')){
+    alerts.push('T-38 · Bilhete emitido antes de 11/12/2025 sob a Lei 15.040. Regime correto: CC art. 766 + Circular SUSEP 621/2021.');
+  }
+  // T-08: retenção só é coerente com dolo; devolução + dolo = contradição
+  const temDolo=d.hip.some(h=>h.id==='omissao_seguro'||h.id==='agravamento')||d.custom.match(/dolo|má-fé|fraude/i);
+  if(temDolo && (d.restituicao==='proporcional'||d.restituicao==='integral')){
+    alerts.push('T-08 · Imputação de dolo/má-fé com devolução de prêmio no mesmo documento — contradição (arts. 44, 66, 69 e 7).');
+  }
+  // T-02: recusa sem fundamento específico
+  if(d.hip.length===0 && !d.custom){
+    alerts.push('T-02 · Recusa sem fundamento específico selecionado (art. 86, §6.º exige motivação).');
+  }
+  // T-16: contestação — o modelo já traz; ok. T-40 embutida na notificação (art.6 nunca como causa) — ok por construção.
+  // T-31: nulidade sem datas
+  if(d.custom.match(/art\.?\s*11|nulidade/i) && (!v('dataEmissao')||!d.dataEvt)){
+    alerts.push('T-31 · Tese de nulidade (art. 11) sem datas de contratação e evento comprovadas.');
+  }
+  const box=document.getElementById('travas-box');
+  if(alerts.length===0){
+    box.innerHTML='<div class="trava-ok">✓ Nenhuma trava disparada. Peça apta à revisão jurídica.</div>';
+  }else{
+    box.innerHTML=alerts.map(a=>'<div class="trava-alert">⚠ '+a+'</div>').join('');
+  }
+}
+
+// ==================== RENDER PRINCIPAL ====================
+function render(){
+  updateRegimeHint();
+  document.getElementById('preview-carta').innerHTML=renderCarta();
+  document.getElementById('preview-notif').innerHTML=renderNotificacao();
+  const d=getData();
+  document.getElementById('seguradora-info').innerHTML='<span class="text-xs">CNPJ '+d.seg.cnpj+' · SUSEP '+d.seg.susep+'</span><div class="text-xs text-slate-500 mt-1">'+(d.seg.cobre||'')+'</div>';
+  document.getElementById('calc-box').innerHTML=calcRestituicao(d).html;
+  checkTravas(d);
+}
+
+// ==================== TABS / VIEWS ====================
+let currentTab='carta';
+function switchTab(t){currentTab=t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  document.getElementById('preview-carta').style.display=t==='carta'?'block':'none';
+  document.getElementById('preview-notif').style.display=t==='notif'?'block':'none';
+}
+function toggleBaseLegal(){document.getElementById('sheet').classList.toggle('hide-base',!document.getElementById('toggleBase').checked);}
+function switchView(vw){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+vw).classList.add('active');
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===vw));
+  if(vw==='banco')renderBanco();
+  if(vw==='fundamentos')renderFundamentos();
+  if(vw==='sobre')renderSobre();
+  window.scrollTo(0,0);
+}
+
+// ==================== AÇÕES DOC ====================
+function docHTML(){
+  const el=currentTab==='carta'?document.getElementById('preview-carta'):document.getElementById('preview-notif');
+  return el.innerHTML;
+}
+function copyDoc(){
+  const el=currentTab==='carta'?document.getElementById('preview-carta'):document.getElementById('preview-notif');
+  navigator.clipboard.writeText(el.innerText).then(()=>toast('Copiado para a área de transferência'));
+}
+function printDoc(){window.print();}
+function downloadDoc(){
+  const d=getData();
+  const nome=currentTab==='carta'
+    ?'CARTA_RESPOSTA_'+d.nome.replace(/\s+/g,'_')+'_SR'+d.sinistro+'.doc'
+    :'NOTIFICACAO_RESOLUCAO_'+d.nome.replace(/\s+/g,'_')+'_BILHETE'+d.bilhete+'.doc';
+  const css='body{font-family:\'Times New Roman\',serif;font-size:12pt;line-height:1.5;color:#000;max-width:17cm;margin:2cm auto;}p{margin:0 0 10pt 0;text-align:justify;}strong{font-weight:700;}.doc-title{font-weight:700;font-size:13pt;text-align:center;text-transform:uppercase;}.doc-sub{text-align:center;font-size:11pt;color:#333;margin-bottom:14pt;}.baselegal{font-family:Arial,sans-serif;font-size:8.5pt;color:#008a6e;background:#ecfdf5;border-left:3px solid #00b28f;padding:4px 8px;margin:-4pt 0 12pt 0;}.letterhead{border-bottom:2px solid #00b28f;padding-bottom:8px;margin-bottom:14pt;}.footer-doc{border-top:1px solid #cbd5e1;margin-top:16pt;padding-top:6px;font-family:Arial;font-size:8pt;color:#64748b;text-align:center;}';
+  const html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+nome+'</title><style>'+css+'</style></head><body>'+docHTML()+'</body></html>';
+  const blob=new Blob(['\ufeff'+html],{type:'application/msword;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nome;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);toast('Documento baixado');
+}
+function toast(m){const t=document.createElement('div');t.className='fixed bottom-6 right-6 bg-[var(--ink)] text-white px-4 py-2 rounded-md text-sm shadow-lg z-50';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2000);}
+
+// ==================== RESET / EXEMPLO / CARREGAR CLIENTE ====================
+function resetForm(){
+  ['sinistro','bilhete','nome','cpf','endereco','aparelho','imei','premio','dataEvt','vigIni','vigFim','dataEmissao','hipoteseCustom'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cidade').value='São Paulo';
+  document.getElementById('regime').value='lei15040';
+  document.getElementById('tratamento').value='Sra.';
+  document.getElementById('seguradora').value='kakau';
+  document.querySelectorAll('input[data-h]').forEach(cb=>{cb.checked=false;cb.closest('.checkbox-row').classList.remove('active');});
+  document.querySelector('input[name=restituicao][value=sem_premio]').checked=true;
+  document.getElementById('dataCarta').value=new Date().toISOString().split('T')[0];
+  render();
+}
+function loadExemplo(){carregarCliente(8);switchView('gerador');}
+
+function carregarCliente(nCliente){
+  const c=CLIENTES.find(x=>x.n===nCliente);if(!c)return;
+  resetForm();
+  document.getElementById('sinistro').value=c.sinistro||'';
+  document.getElementById('bilhete').value=c.bilhete||'';
+  document.getElementById('nome').value=c.nome||'';
+  document.getElementById('cpf').value=c.cpf||'';
+  document.getElementById('tratamento').value=c.trat||'Sra.';
+  document.getElementById('endereco').value=(c.endereco&&c.endereco!=='—')?c.endereco:'';
+  document.getElementById('aparelho').value=c.aparelho||'';
+  document.getElementById('imei').value=c.imei||'';
+  document.getElementById('seguradora').value=c.seg||'kakau';
+  document.getElementById('evento').value=c.evento||'Roubo';
+  document.getElementById('dataEvt').value=c.dataEvt||'';
+  document.getElementById('dataEmissao').value=c.dataContrat||'';
+  document.getElementById('premio').value=c.premio||'';
+  document.getElementById('regime').value=c.regime||'lei15040';
+  if(c.notifRestituicao){const r=document.querySelector('input[name=restituicao][value='+c.notifRestituicao+']');if(r)r.checked=true;}
+  // vigência: se houver dataContrat, assume 12 meses; se houver vigenciaFim explícito, usa
+  if(c.dataContrat){document.getElementById('vigIni').value=c.dataContrat;
+    if(c.vigenciaFim){const[dd,mm,yy]=c.vigenciaFim.split('/');document.getElementById('vigFim').value=yy+'-'+mm+'-'+dd;}
+    else{const dt=new Date(c.dataContrat);dt.setFullYear(dt.getFullYear()+1);document.getElementById('vigFim').value=dt.toISOString().split('T')[0];}
+  }
+  autoRegime();document.getElementById('regime').value=c.regime||'lei15040';
+  render();switchView('gerador');toast('Cliente carregado: '+c.nome);
+}
+
+// ==================== BANCO DE DADOS ====================
+function renderBanco(){
+  const q=(v('buscaBanco')||'').toLowerCase();
+  const tb=document.getElementById('banco-tbody');tb.innerHTML='';
+  const filtrados=CLIENTES.filter(c=>!q||[c.nome,c.cpf,c.bilhete,c.sinistro,c.aparelho].join(' ').toLowerCase().includes(q));
+  filtrados.forEach(c=>{
+    const docs=[];
+    if(c.carta)docs.push('<span class="badge" style="background:#fee2e2;color:#991b1b">Recusa</span>');
+    if(c.notif)docs.push('<span class="badge" style="background:#e0e7ff;color:#3730a3">Resolução</span>');
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td class="text-slate-400">'+c.n+'</td>'
+      +'<td class="font-semibold">'+c.nome+'</td>'
+      +'<td class="text-slate-500">'+c.cpf+'</td>'
+      +'<td>'+(SEGURADORAS[c.seg]?SEGURADORAS[c.seg].nome:c.seg)+'</td>'
+      +'<td class="text-slate-500">B. '+c.bilhete+'<br>S. '+c.sinistro+'</td>'
+      +'<td class="text-slate-600">'+c.aparelho+'</td>'
+      +'<td>'+docs.join(' ')+'</td>'
+      +'<td class="whitespace-nowrap"><button class="btn btn-secondary text-xs" onclick="verCartas('+c.n+')">Ver</button> <button class="btn btn-primary text-xs" onclick="carregarCliente('+c.n+')">Carregar</button></td>';
+    tb.appendChild(tr);
+  });
+  const totCartas=CLIENTES.filter(c=>c.carta).length, totNot=CLIENTES.filter(c=>c.notif).length;
+  document.getElementById('banco-count').textContent=CLIENTES.length+' clientes · '+(totCartas+totNot)+' cartas ('+totCartas+' recusas · '+totNot+' resoluções)';
+}
+
+function verCartas(n){
+  const c=CLIENTES.find(x=>x.n===n);if(!c)return;
+  const seg=SEGURADORAS[c.seg]||{};
+  const head='<div class="letterhead"><svg width="90" height="32" viewBox="0 0 172 60"><g fill="#00b28f"><path d="M6 12h13c9 0 15 5 15 13s-6 13-15 13h-6v8H6V12zm7 8v10h5c4 0 6-2 6-5s-2-5-6-5h-5z"/><rect x="40" y="12" width="7" height="34"/><path d="M56 20h5v-8h7v8h7v7h-7v9c0 2 1 3 3 3h4v7h-6c-6 0-8-3-8-8V27h-5v-7z"/><path d="M84 20h26v6L94 39h16v7H83v-6l16-13H84z"/><rect x="116" y="20" width="7" height="26"/></g><circle cx="119.5" cy="14" r="4" fill="#0a1128"/></svg><div class="lh-meta">Representante de '+(seg.nome||'')+'<br>CNPJ 13.403.189/0001-05</div></div>';
+  let html='';
+  if(c.carta){
+    html+='<div class="doc-sheet bg-white p-8 rounded shadow-sm mb-6" style="max-width:18cm;margin:0 auto">'
+      +head
+      +'<p class="doc-title">Carta de Resposta à Regulação de Sinistro</p>'
+      +'<p class="doc-sub">Sinistro n.º '+c.sinistro+' · Bilhete n.º '+c.bilhete+'</p>'
+      +'<div class="doc-head"><p>São Paulo, '+(c.cartaData||'')+'.</p>'
+      +'<p style="margin-top:8pt">'+(c.trat==='Sr.'?'Ao Sr.':'À Sr.ª')+' <strong>'+c.nome+'</strong></p>'
+      +'<p>CPF n.º '+c.cpf+'</p><p>Aparelho: '+c.aparelho+' · IMEI n.º '+c.imei+'</p></div>'
+      +'<p class="clause" style="margin-top:12pt">'+(c.trat==='Sr.'?'Prezado':'Prezada')+' Titular,</p>'
+      +c.carta.split('\n\n').map(p=>'<p class="clause">'+p+'</p>').join('')
+      +'<p class="sig">Atenciosamente,</p><p><strong>Departamento de Regulação — Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda.</strong></p></div>';
+  }
+  if(c.notif){
+    html+='<div class="doc-sheet bg-white p-8 rounded shadow-sm" style="max-width:18cm;margin:0 auto">'
+      +head
+      +'<p class="doc-title">Notificação de Resolução do Contrato de Proteção</p>'
+      +'<p class="doc-sub">Bilhete n.º '+c.bilhete+' · Sinistro n.º '+c.sinistro+'</p>'
+      +'<p class="clause"><strong>1. IDENTIFICAÇÃO DAS PARTES</strong></p>'
+      +'<p class="clause"><strong>Representante:</strong> Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda., CNPJ n.º 13.403.189/0001-05, na qualidade de representante da <strong>'+(seg.nome||'')+'</strong>, CNPJ n.º '+(seg.cnpj||'')+', Processo SUSEP n.º '+(seg.susep||'')+'.</p>'
+      +'<p class="clause"><strong>Titular:</strong> '+c.nome+', '+(c.trat==='Sr.'?'inscrito':'inscrita')+' no CPF/MF sob o n.º '+c.cpf+(c.endereco&&c.endereco!=='—'?', residente na '+c.endereco:'')+'.</p>'
+      +'<p class="clause"><strong>2. OBJETO DA NOTIFICAÇÃO</strong></p>'
+      +'<p class="clause">Esta notificação formaliza a resolução do Contrato de Proteção formalizado pelo Bilhete n.º '+c.bilhete+', referente ao aparelho '+c.aparelho+', IMEI n.º '+c.imei+', vinculado à proteção contratada por intermédio do parceiro.</p>'
+      +'<p class="clause"><strong>3. FUNDAMENTAÇÃO E EFEITOS</strong></p>'
+      +c.notif.split('\n\n').map(p=>'<p class="clause">'+p+'</p>').join('')
+      +'<p class="sig">São Paulo, '+(c.notifData||c.cartaData||'')+'.</p><p class="sig">Atenciosamente,</p><p><strong>Pitzi.com.br Reparação e Manutenção de Equipamentos Eletrônicos Ltda. — Departamento de Regulação</strong></p></div>';
+  }
+  openModal(c.nome, html);
+}
+
+// ==================== MODAL ====================
+function openModal(titulo,html){
+  let m=document.getElementById('modal');
+  if(!m){m=document.createElement('div');m.id='modal';document.body.appendChild(m);}
+  m.className='fixed inset-0 z-50 bg-black/50 flex items-start justify-center overflow-y-auto p-4 no-print';
+  m.innerHTML='<div class="bg-slate-100 rounded-xl max-w-4xl w-full my-4"><div class="flex items-center justify-between px-5 py-3 border-b border-slate-200 bg-white rounded-t-xl sticky top-0"><div class="font-bold">'+titulo+'</div><button onclick="closeModal()" class="btn btn-secondary text-xs">Fechar</button></div><div class="p-5">'+html+'</div></div>';
+  m.onclick=e=>{if(e.target===m)closeModal();};
+}
+function closeModal(){const m=document.getElementById('modal');if(m)m.remove();}
+
+// ==================== FUNDAMENTOS ====================
+function renderFundamentos(){
+  const q=(v('buscaFL')||'').toLowerCase();
+  const fr=v('filtroRegimeFL')||'todos';
+  const grid=document.getElementById('fl-grid');grid.innerHTML='';
+  FUNDAMENTOS_LEGAIS.filter(f=>{
+    if(fr!=='todos'&&f.regime!==fr)return false;
+    if(q&&![f.id,f.art,f.ementa,f.texto,f.norma].join(' ').toLowerCase().includes(q))return false;
+    return true;
+  }).forEach(f=>{
+    const pill=f.regime==='lei15040'?'regime-lei':f.regime==='anterior'?'regime-ant':'';
+    const pillLabel=f.regime==='lei15040'?'Lei 15.040':f.regime==='anterior'?'Regime anterior':'Comum';
+    const stColor=f.status.startsWith('Valid')?'#008a6e':'#c2410c';
+    const div=document.createElement('div');div.className='fl-card';
+    div.innerHTML='<div class="flex items-center justify-between mb-1"><span class="fl-art">'+f.norma+' · art. '+f.art+'</span>'
+      +'<span class="regime-pill '+pill+'" style="'+(pill?'':'background:#e2e8f0;color:#334155')+'">'+pillLabel+'</span></div>'
+      +'<div class="text-sm font-semibold mb-1">'+f.id+' — '+f.ementa+'</div>'
+      +'<div class="text-xs text-slate-600 mb-2">'+f.texto+'</div>'
+      +'<div class="text-xs"><b class="text-slate-700">Quando usar:</b> '+f.quando+'</div>'
+      +'<div class="text-[11px] mt-2" style="color:'+stColor+'">● '+f.status+'</div>';
+    grid.appendChild(div);
+  });
+}
+
+// ==================== SOBRE / SEGURADORAS ====================
+function renderSobre(){
+  const box=document.getElementById('sobre-seg');box.innerHTML='';
+  Object.keys(SEGURADORAS).forEach(k=>{
+    const s=SEGURADORAS[k];if(k==='mapfre')return;
+    box.innerHTML+='<div class="border border-slate-200 rounded-lg p-3"><div class="font-semibold">'+s.nome+'</div>'
+      +'<div class="text-xs text-slate-500 mb-1">CNPJ '+s.cnpj+' · Processo SUSEP '+s.susep+'</div>'
+      +'<div class="text-xs text-slate-700"><b>Regime:</b> '+s.regimeNota+'</div>'
+      +'<div class="text-xs text-slate-700 mt-1"><b>Franquia:</b> '+s.franquia+'</div>'
+      +'<div class="text-xs text-slate-700 mt-1"><b>Cobertura:</b> '+s.cobre+'</div></div>';
+  });
+}
+
+// ==================== BOOT ====================
+initHipoteses();
+document.getElementById('dataCarta').value=new Date().toISOString().split('T')[0];
+updateRegimeHint();
+render();
+</script>
+</body>
+</html>
